@@ -1,0 +1,14 @@
+<font>
+	<sprite name="bonus4_multiplier_digits" offset="0" kern="0" lead="0" >
+		<frame name="0" w="2" h="2" x="2" y="2" /> 
+		<frame name="1" w="60" h="43" x="2" y="362" /> 
+		<frame name="2" w="66" h="43" x="2" y="317" /> 
+		<frame name="3" w="66" h="43" x="2" y="272" /> 
+		<frame name="4" w="66" h="43" x="2" y="227" /> 
+		<frame name="5" w="66" h="43" x="2" y="182" /> 
+		<frame name="6" w="66" h="43" x="2" y="137" /> 
+		<frame name="7" w="66" h="43" x="2" y="92" /> 
+		<frame name="8" w="66" h="43" x="2" y="47" /> 
+		<frame name="9" w="66" h="43" x="2" y="2" /> 
+	</sprite>
+</font>

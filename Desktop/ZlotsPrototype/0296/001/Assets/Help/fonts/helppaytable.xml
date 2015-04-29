@@ -1,0 +1,15 @@
+<font>
+	<sprite name="helppaytable" offset="0" kern="0" lead="0" >
+		<frame name="0" w="12" h="24" x="2" y="2" /> 
+		<frame name="1" w="8" h="24" x="2" y="236" /> 
+		<frame name="2" w="12" h="24" x="2" y="210" /> 
+		<frame name="3" w="12" h="24" x="2" y="184" /> 
+		<frame name="4" w="12" h="24" x="2" y="158" /> 
+		<frame name="5" w="12" h="24" x="2" y="132" /> 
+		<frame name="6" w="12" h="24" x="2" y="106" /> 
+		<frame name="7" w="12" h="24" x="2" y="80" /> 
+		<frame name="8" w="12" h="24" x="2" y="54" /> 
+		<frame name="9" w="12" h="24" x="2" y="28" /> 
+		<frame name=" " w="12" h="1" x="0" y="0" /> 
+	</sprite>
+</font>

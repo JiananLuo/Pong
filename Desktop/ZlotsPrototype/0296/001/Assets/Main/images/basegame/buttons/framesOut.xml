@@ -1,0 +1,5 @@
+<frameset name="framesOut" count="3">
+	<frame id="1" width="54" height="40" srcX="0" srcY="0" dstX="0" dstY="0" />
+	<frame id="2" width="54" height="40" srcX="0" srcY="0" dstX="0" dstY="0" />
+	<frame id="3" width="54" height="40" srcX="0" srcY="0" dstX="0" dstY="0" />
+</frameset>

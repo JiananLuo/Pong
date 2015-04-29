@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<font>
+	<sprite name="b1_total_digits" offset="0" kern="0" lead="0" >
+		<frame name="0" w="19" h="36" x="0" y="0" />
+		<frame name="1" w="19" h="36" x="0" y="36" />
+		<frame name="2" w="19" h="36" x="0" y="72" />
+		<frame name="3" w="19" h="36" x="0" y="108" />
+		<frame name="4" w="19" h="36" x="0" y="144" />
+		<frame name="5" w="19" h="36" x="0" y="180" />
+		<frame name="6" w="19" h="36" x="0" y="216" />
+		<frame name="7" w="19" h="36" x="0" y="252" />
+		<frame name="8" w="19" h="36" x="0" y="288" />
+		<frame name="9" w="19" h="36" x="0" y="324" />
+		<frame name="$" w="19" h="36" x="0" y="360" />
+		<frame name="." w="9" h="36" x="0" y="396" />
+		<frame name=" " w="1" h="1" x="0" y="0" />
+		<frame name="" w="1" h="1" x="0" y="0" />
+	</sprite>
+</font>

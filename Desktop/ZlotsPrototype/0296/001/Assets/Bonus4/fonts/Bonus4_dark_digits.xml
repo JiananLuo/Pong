@@ -1,0 +1,14 @@
+<font>
+	<sprite name="bonus_dark_digits" offset="0" kern="0" lead="0" >
+		<frame name="0" w="12" h="20" x="2" y="2" /> 
+		<frame name="1" w="8" h="20" x="2" y="200" /> 
+		<frame name="2" w="12" h="20" x="2" y="178" /> 
+		<frame name="3" w="12" h="20" x="2" y="156" /> 
+		<frame name="4" w="12" h="20" x="2" y="134" /> 
+		<frame name="5" w="12" h="20" x="2" y="112" /> 
+		<frame name="6" w="12" h="20" x="2" y="90" /> 
+		<frame name="7" w="12" h="20" x="2" y="68" /> 
+		<frame name="8" w="12" h="20" x="2" y="46" /> 
+		<frame name="9" w="12" h="20" x="2" y="24" /> 
+	</sprite>
+</font>

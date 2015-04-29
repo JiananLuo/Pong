@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<font>
+	<sprite name="b1_level1_selected" offset="0" kern="0" lead="0" >
+	<frame name="0" w="17" h="30" x="0" y="0" />
+	<frame name="1" w="8" h="30" x="0" y="30" />
+	<frame name="2" w="17" h="30" x="0" y="60" />
+	<frame name="3" w="17" h="30" x="0" y="90" />
+	<frame name="4" w="17" h="30" x="0" y="120" />
+	<frame name="5" w="17" h="30" x="0" y="150" />
+	<frame name="6" w="17" h="30" x="0" y="180" />
+	<frame name="7" w="17" h="30" x="0" y="210" />
+	<frame name="8" w="17" h="30" x="0" y="240" />
+	<frame name="9" w="17" h="30" x="0" y="270" />
+	<frame name="$" w="17" h="30" x="0" y="300" />
+	<frame name="." w="6" h="7" x="0" y="330" />
+	</sprite>
+</font>
+

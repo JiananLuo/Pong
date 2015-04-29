@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<font>
+	<sprite name="ticket_digits" offset="0" kern="0" lead="0" >
+		<frame name="0" w="8" h="11" x="0" y="0" />
+		<frame name="1" w="5" h="11" x="0" y="11"/>
+		<frame name="2" w="8" h="11" x="0" y="22" />
+		<frame name="3" w="8" h="11" x="0" y="33" />
+		<frame name="4" w="8" h="11" x="0" y="44" />
+		<frame name="5" w="8" h="11" x="0" y="55" />
+		<frame name="6" w="8" h="11" x="0" y="66" />
+		<frame name="7" w="8" h="11" x="0" y="77" />
+		<frame name="8" w="8" h="11" x="0" y="88" />
+		<frame name="9" w="8" h="11" x="0" y="99" />
+	</sprite>
+</font>
