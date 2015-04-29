@@ -1,0 +1,1 @@
+.\xmllint.exe --nowarning ..\Main.xml & pause 

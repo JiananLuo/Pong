@@ -1,0 +1,2273 @@
+<Root
+	xmlns:ac="http://pongmarketing.com/actions"
+	xmlns:l="http://pongmarketing.com/layout"
+>
+	<!-- CLASSIQUE 7s 3x3 -->
+	
+	<!--  debug = "" or number 1 - 5  -->
+	<Config
+		version = "0.0"
+		debug = "1"
+		model = "slots"
+		gameProtocol = "slots"		
+		transport = "externalInterface"
+		gameId = "0289"
+		gameGroup = "slots"
+		cols = "3"
+		rows = "3"
+		lines = "8"
+		frameRate = "60"
+		behaviorTags = "slots skill game_internaljp game_roses"
+		allowStop = "false" 
+	/>
+	
+	<!--  Framework requires that overlay is included  -->
+	<Module url="asset://../../../../Common/001/SharedGames/NPWcover.xml" />
+	<Module url="asset://../../../../Common/001/SharedGames/Overlay.xml" />
+	<Module url="asset://../../../../Common/001/SkipSkill/SkipSkill.xml" />
+	<Module url="asset://../../../../Common/001/SkillGame/SkillGame1.xml" />
+	<Module url="asset://../../../../Common/001/SkillGame2/SkillGame2.xml" />
+	
+	
+	<l:Scenes>
+
+		<l:Globals>
+		
+		<!-- ____ ASSET DEFINITIONS ____ -->
+			
+			
+		<!-- MAIN Scene -->
+			<l:Cocos2DAtlas id="symbolsAtlas" bitmap="asset://images/reels/reel_icons.png" dataFile="asset://images/reels/reel_icons.xml"/>
+			
+			<l:Cocos2DAtlas id="indicatorAtlas" bitmap="asset://images/indicators/indicator.png" dataFile="asset://images/indicators/indicator.xml"/>
+			<l:Cocos2DAtlas id="denominationsAtlas" bitmap="asset://images/denominations.png" dataFile="asset://images/denominations.xml"/>
+			
+			<l:Cocos2DAtlas id="allWinLinesAtlas" bitmap="asset://images/winlines/allWinLines.png" dataFile="asset://images/winlines/allWinLines.xml" />
+			<l:Cocos2DAtlas id="winframeAtlas" bitmap="asset://images/winlines/allWinFrames.png" dataFile="asset://images/winlines/allWinFrames.xml" />
+
+			<l:Cocos2DAtlas id="jackpotAnimAtlas" bitmap="asset://../../../../Common/001/SharedGames/JPot/sweeps_jackpot_anim.png" dataFile="asset://../../../../Common/001/SharedGames/JPot/sweeps_jackpot_anim.xml" />
+			<l:Cocos2DAtlas id="bigWinAtlas" bitmap="asset://images/animations/big_win.png" dataFile="asset://images/animations/big_win.xml" />
+
+			<!-- good luck messages -->
+			<l:Cocos2DAtlas id="msgInfoBarAtlas" bitmap="asset://images/messages/msgInfo.png" dataFile="asset://images/messages/msgInfo.xml" />
+			
+			<l:IncludeIf target="@(game.config.features.GF_INFO_PANEL == 'GF_INFO_PANEL_SWEEPS' || game.config.features.GF_INFO_PANEL == null)">
+				<l:Cocos2DAtlas id="msgsAtlas" bitmap="asset://images/messages/msgs.png" dataFile="asset://images/messages/msgs.xml" />
+			</l:IncludeIf>
+			<l:IncludeIf target="@(game.config.features.GF_INFO_PANEL != 'GF_INFO_PANEL_SWEEPS' || game.config.features.GF_INFO_PANEL != null)">
+				<l:Cocos2DAtlas id="msgsAtlas" bitmap="asset://images/messages/msgsSweepSkills.png" dataFile="asset://images/messages/msgsSweepSkills.xml" />
+			</l:IncludeIf>
+			
+		<!-- main buttons -->
+			<l:Cocos2DAtlas id="btnBuyTimeAtlas" bitmap="asset://images/buttons/buy_time.png" dataFile="asset://images/buttons/buy_time.xml"/>
+			<l:Cocos2DAtlas id="btnChangeGameAtlas" bitmap="asset://images/buttons/change_game.png" dataFile="asset://images/buttons/change_game.xml"/>
+			<l:Cocos2DAtlas id="btnHelpAtlas" bitmap="asset://images/buttons/help.png" dataFile="asset://images/buttons/help.xml"/>
+			<l:Cocos2DAtlas id="btnClearAllAtlas" bitmap="asset://images/buttons/clear_all.png" dataFile="asset://images/buttons/clear_all.xml"/>
+			<l:Cocos2DAtlas id="btnAutoRevealAtlas" bitmap="asset://images/buttons/auto_reveal.png" dataFile="asset://images/buttons/auto_reveal.xml"/>
+			<l:Cocos2DAtlas id="btnAutoStopAtlas" bitmap="asset://images/buttons/auto_stop.png" dataFile="asset://images/buttons/auto_stop.xml"/>
+			
+			<l:Cocos2DAtlas id="btnRevealAtlas" bitmap="asset://images/buttons/reveal.png" dataFile="asset://images/buttons/reveal.xml"/>
+			<l:Cocos2DAtlas id="btnStopAtlas" bitmap="asset://images/buttons/btn_stop.png" dataFile="asset://images/buttons/btn_stop.xml"/>
+			
+			<l:Cocos2DAtlas id="mysteryJackpotAtlas" bitmap="asset://images/jp/mystery_jackpot.png" dataFile="asset://images/jp/mystery_jackpot.xml"/>
+
+		<!-- main fonts -->
+			<l:FontAtlas id="ticketFontAtlas" bitmap="asset://../../../../Common/001/SharedGames/prereveal/ticket_digits_mini.png" dataFile="asset://../../../../Common/001/SharedGames/prereveal/ticket_digits_mini.xml" />
+
+			<l:FontAtlas id="jackpotBigFontAtlas" bitmap="asset://../../../../Common/001/SharedGames//JPot/digits_jackpot.png" dataFile="asset://../../../../Common/001/SharedGames//JPot/digits_jackpot.xml" />
+			<l:FontAtlas id="infobarDigitsAtlas" bitmap="asset://fonts/digits_infobar.png" dataFile="asset://fonts/digits_infobar.xml" />
+
+			<l:FontAtlas id="indicatorDigitsAtlas" bitmap="asset://fonts/digits_level.png" dataFile="asset://fonts/digits_level.xml" />
+			
+			<l:FontAtlas id="freespinFontAtlas" bitmap="asset://fonts/digits_freespins.png" dataFile="asset://fonts/digits_freespins.xml" />
+
+			<l:FontAtlas id="bigwinAtlas" bitmap="asset://fonts/bigwin_digits.png" dataFile="asset://fonts/bigwin_digits.xml" />
+
+			<l:Cocos2DAtlas id="btnEntryLevel0Atlas" bitmap="asset://images/buttons/entry_level/level_0.png" dataFile="asset://images/buttons/entry_level/level_0.xml"/>
+			<l:Cocos2DAtlas id="btnEntryLevel1Atlas" bitmap="asset://images/buttons/entry_level/level_1.png" dataFile="asset://images/buttons/entry_level/level_1.xml"/>
+			<l:Cocos2DAtlas id="btnEntryLevel2Atlas" bitmap="asset://images/buttons/entry_level/level_2.png" dataFile="asset://images/buttons/entry_level/level_2.xml"/>
+			<l:Cocos2DAtlas id="btnEntryLevel3Atlas" bitmap="asset://images/buttons/entry_level/level_3.png" dataFile="asset://images/buttons/entry_level/level_3.xml"/>
+			<l:Cocos2DAtlas id="btnEntryLevel4Atlas" bitmap="asset://images/buttons/entry_level/level_4.png" dataFile="asset://images/buttons/entry_level/level_4.xml"/>
+			
+			<!-- progressive win atlases -->
+			<l:Cocos2DAtlas id="progressiveAnimatedDigits" bitmap="asset://fonts/digits_spin_anim_final.png" dataFile="asset://fonts/digits_spin_anim_final.xml"/>
+			<l:Cocos2DAtlas id="progressiveJPAnimationFrames" bitmap="asset://images/jp/jp3.png" dataFile="asset://images/jp/jp3.xml"/>
+			<l:Cocos2DAtlas id="progressivePannel1" bitmap="asset://images/jp/progressive1.png" dataFile="asset://images/jp/progressive1.xml"/>
+			<l:Cocos2DAtlas id="progressivePannel2" bitmap="asset://images/jp/progressive2.png" dataFile="asset://images/jp/progressive2.xml"/>
+			<l:Cocos2DAtlas id="progressivePannel3" bitmap="asset://images/jp/progressive3.png" dataFile="asset://images/jp/progressive3.xml"/>
+			
+			<!-- freespin pick game atlases -->
+			<l:Cocos2DAtlas id="freespinAnimationAtlas" bitmap="asset://images/icons/freespin_anim.png" dataFile="asset://images/icons/freespin_anim.xml" />
+			<l:Cocos2DAtlas id="potionAnimationAtlas" bitmap="asset://images/icons/morph.png" dataFile="asset://images/icons/morph.xml" />
+
+			<l:Animation id="symbol0anim">
+				<l:FrameSet id="static" atlas="symbolsAtlas" fromFrame="0" toFrame="0" duration="1" fps=""/>
+				<l:FrameSet id="win" atlas="symbolsAtlas" fromFrame="0" toFrame="5" duration="1" fps="15"/>
+				<l:FrameSet id="empty" atlas="symbolsAtlas" fromFrame="30" toFrame="30" duration="1" fps=""/>
+			</l:Animation>
+			
+			<l:Animation id="symbol1anim">
+				<l:FrameSet id="static" atlas="symbolsAtlas" fromFrame="6" toFrame="6" duration="1" fps=""/>
+				<l:FrameSet id="win" atlas="symbolsAtlas" fromFrame="6" toFrame="9" duration="1" fps="15"/>
+				<l:FrameSet id="empty" atlas="symbolsAtlas" fromFrame="30" toFrame="30" duration="1" fps=""/>
+			</l:Animation>
+			
+			<l:Animation id="symbol2anim">
+				<l:FrameSet id="static" atlas="symbolsAtlas" fromFrame="10" toFrame="10" duration="1" fps=""/>
+				<l:FrameSet id="win" atlas="symbolsAtlas" fromFrame="10" toFrame="13" duration="1" fps="15"/>
+				<l:FrameSet id="empty" atlas="symbolsAtlas" fromFrame="30" toFrame="30" duration="1" fps=""/>
+			</l:Animation>
+			
+			<l:Animation id="symbol3anim">
+				<l:FrameSet id="static" atlas="symbolsAtlas" fromFrame="14" toFrame="14" duration="1" fps=""/>
+				<l:FrameSet id="win" atlas="symbolsAtlas" fromFrame="14" toFrame="18" duration="1" fps="15"/>
+				<l:FrameSet id="empty" atlas="symbolsAtlas" fromFrame="30" toFrame="30" duration="1" fps=""/>
+			</l:Animation>
+			
+			<l:Animation id="symbol4anim">
+				<l:FrameSet id="static" atlas="symbolsAtlas" fromFrame="19" toFrame="19" duration="1" fps=""/>
+				<l:FrameSet id="win" atlas="symbolsAtlas" fromFrame="19" toFrame="23" duration="1" fps="15"/>
+				<l:FrameSet id="empty" atlas="symbolsAtlas" fromFrame="30" toFrame="30" duration="1" fps=""/>
+			</l:Animation>
+			
+			<l:Animation id="symbol5anim">
+				<l:FrameSet id="static" atlas="symbolsAtlas" fromFrame="24" toFrame="24" duration="1" fps=""/>
+				<l:FrameSet id="win" atlas="symbolsAtlas" fromFrame="24" toFrame="28" duration="1" fps="15"/>
+				<l:FrameSet id="empty" atlas="symbolsAtlas" fromFrame="30" toFrame="30" duration="1" fps=""/>
+			</l:Animation>
+			
+			<l:Animation id="symbol6anim">
+				<l:FrameSet id="static" atlas="symbolsAtlas" fromFrame="29" toFrame="29" duration="1" fps=""/>
+				<l:FrameSet id="win" atlas="symbolsAtlas" fromFrame="29" toFrame="29" duration="1" fps="15"/>
+				<l:FrameSet id="empty" atlas="symbolsAtlas" fromFrame="30" toFrame="30" duration="1" fps=""/>
+			</l:Animation>
+			
+		<!-- main idle animations -->
+
+			<l:Animation id="jackpotAnim">
+				<l:FrameSet id="" atlas="jackpotAnimAtlas" fromFrame="0" toFrame="2" duration="" fps="10" />
+			</l:Animation>
+
+			<l:Animation id="winframeAnim0">
+				<l:FrameSet id="winframe0" atlas="winframeAtlas" fromFrame="0" toFrame="0" duration="1" fps="" />
+			</l:Animation>
+			<l:Animation id="winframeAnim1">
+				<l:FrameSet id="winframe1" atlas="winframeAtlas" fromFrame="1" toFrame="1" duration="1" fps="" />
+			</l:Animation>
+			<l:Animation id="winframeAnim2">
+				<l:FrameSet id="winframe2" atlas="winframeAtlas" fromFrame="2" toFrame="2" duration="1" fps="" />
+			</l:Animation>
+			<l:Animation id="winframeAnim3">
+				<l:FrameSet id="winframe3" atlas="winframeAtlas" fromFrame="3" toFrame="3" duration="1" fps="" />
+			</l:Animation>
+			
+			<l:Animation id="progressiveJPAnimation">
+				<l:FrameSet id="animate" atlas="progressiveJPAnimationFrames" fromFrame="0" toFrame="1" duration="" fps="7" loop="true"/>
+			</l:Animation>
+
+			<l:Animation id="bigWinAnim">
+				<l:FrameSet id="static" atlas="bigWinAtlas" fromFrame="0" toFrame="0" duration="" fps="" />
+				<l:FrameSet id="bigwin_center" atlas="bigWinAtlas" fromFrame="1" toFrame="5" duration="" fps="10" />
+			</l:Animation>
+
+			<l:Animation id="msgInfoBarAnim">
+				<l:FrameSet id="1" atlas="msgInfoBarAtlas" fromFrame="0" toFrame="1" duration="" fps="10" />
+				<l:FrameSet id="2" atlas="msgInfoBarAtlas" fromFrame="2" toFrame="3" duration="" fps="10" />
+				<l:FrameSet id="3" atlas="msgInfoBarAtlas" fromFrame="4" toFrame="5" duration="" fps="10" />
+			</l:Animation>
+			
+			<l:Animation id="bonusBtnsAnim">
+				<l:FrameSet id="idle" atlas="freespinAnimationAtlas" fromFrame="0" toFrame="4" duration="" fps="30" />
+			</l:Animation>
+			<l:Animation id="bonusPotionAnim">
+				<l:FrameSet id="static" atlas="potionAnimationAtlas" fromFrame="0" toFrame="0" duration="" fps="30" />
+				<l:FrameSet id="fadeAway" atlas="potionAnimationAtlas" fromFrame="0" toFrame="9" duration="" fps="10" />
+			</l:Animation>
+			
+			<l:Animation id="progressiveJPDigitsAnim" >
+				<l:FrameSet id="" atlas="progressiveAnimatedDigits" fromFrame="0" toFrame="19" duration="" fps="20" loop="true" autoPlay="true"/>
+			</l:Animation>
+			
+<!-- HELP Scene -->
+		<!-- help fonts -->
+			<l:FontAtlas id="helpFontAtlas" bitmap="asset://help/digits_paytable.png" dataFile="asset://help/digits_paytable.xml" />
+			<!-- help buttons -->
+			<l:Cocos2DAtlas id="btnGeneralRulesAtlas" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_general_rules.png" dataFile="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_all.xml"/>
+			<l:Cocos2DAtlas id="btnWintableAtlas" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_wintable.png" dataFile="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_all.xml"/>
+			<l:Cocos2DAtlas id="btnReturnAtlas" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_return_game.png" dataFile="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_return_game.xml"/>
+			<l:Cocos2DAtlas id="btnNextPageAtlas" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_next_page.png" dataFile="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_nav.xml"/>
+			<l:Cocos2DAtlas id="btnPreviousPageAtlas" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_previous_page.png" dataFile="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/buttons/btn_nav.xml"/>
+
+		</l:Globals>
+
+		<!-- ____ SCENE DEFINITIONS _____________ -->
+
+		<l:Scene id="main">
+			
+ 			<l:Sound id="generic_button_snd" data="asset://sounds/click.mp3" />
+ 			<l:Sound id="auto_reveal_snd" data="asset://sounds/Stopstartautoplay.mp3" />
+			<l:Sound id="reveal_snd" data="asset://sounds/Play.mp3" />
+			
+			<l:Sound id="entrylevel0_snd" data="asset://sounds/Bets1.mp3" />
+			<l:Sound id="entrylevel1_snd" data="asset://sounds/Bets2.mp3" />
+			<l:Sound id="entrylevel2_snd" data="asset://sounds/Bets3.mp3" />
+			<l:Sound id="entrylevel3_snd" data="asset://sounds/Bets5.mp3" />
+			<l:Sound id="entrylevel4_snd" data="asset://sounds/Bets10.mp3" />
+			
+			<l:Sound id="entries1_snd" data="asset://sounds/Bets1.mp3" />
+			<l:Sound id="entries2_snd" data="asset://sounds/Bets2.mp3" />
+			<l:Sound id="entries3_snd" data="asset://sounds/Bets3.mp3" />
+			<l:Sound id="entries4_snd" data="asset://sounds/Bets5.mp3" />
+			<l:Sound id="entries5_snd" data="asset://sounds/Bets10.mp3" />
+			
+			<l:Sound id="spinReel_snd" data="asset://sounds/spinloop.mp3" />
+			<l:Sound id="freeSpinReel_snd" data="asset://sounds/Freespinloop.mp3" />
+			<l:Sound id="freeSpin1_snd" data="asset://sounds/Morph.mp3" />
+			<l:Sound id="freeSpin2_snd" data="asset://sounds/freespin.mp3" />
+
+			<l:Sound id="big_win_start_snd" data="asset://sounds/BigWin.mp3" />
+			<l:Sound id="big_win_end_snd" data="asset://sounds/BigWinFlyAway.mp3" />
+
+			<l:Sound id="pointsCountUp_snd" data="asset://sounds/countup.mp3" loop="true" />
+			<l:Sound id="pointsCountEnd_snd" data="asset://sounds/countend.mp3" loop="false" />
+			<l:Sound id="no_win_snd" data="asset://sounds/nowin.mp3" />
+
+			<l:Sound id="winningSymbol0_snd" data="asset://sounds/win_flash01.mp3" />
+			<l:Sound id="winningSymbol1_snd" data="asset://sounds/win_flash02.mp3" />
+			<l:Sound id="winningSymbol2_snd" data="asset://sounds/win_flash03.mp3" />
+			<l:Sound id="winningSymbol3_snd" data="asset://sounds/win_flash04.mp3" />
+			<l:Sound id="winningSymbol4_snd" data="asset://sounds/win_flash05.mp3" />
+			<l:Sound id="winningSymbol5_snd" data="asset://sounds/win_flash06.mp3" />
+			<l:Sound id="winningSymbol6_snd" data="asset://sounds/win_flash07.mp3" />
+			<l:Sound id="winningSymbol7_snd" data="asset://sounds/win_flash08.mp3" />
+			
+			<l:Sound id="winningSymbolEnd_snd" data="asset://sounds/Progressive1.mp3" />
+
+			<l:Layer x="0" y="0" zindex="0">
+				<l:Sprite id="background" x="0" y="0" bitmap="asset://images/main.png" visible="${ui.mainBkg.visible}" />
+			</l:Layer>
+			
+			<l:Layer id="progressive_jackpot" x="647" y="47" zindex="1">
+				<l:Sprite id="progressive1" x="0" y="0" atlas="progressivePannel1" frameIndex="${ui.progrssive1.frameIndex}" />
+				<l:Label id="progressive1Label" x="4" y="69" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${ui.pjp[1].text.value}" />
+				<l:AnimatingSprite id="pjp_digits_anim10" x="${ui.pjp10.x}" y="62" animation="progressiveJPDigitsAnim" visible="${ui.pjp10.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim11" x="${ui.pjp11.x}" y="62" animation="progressiveJPDigitsAnim" visible="${ui.pjp11.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim12" x="${ui.pjp12.x}" y="62" animation="progressiveJPDigitsAnim" visible="${ui.pjp12.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim13" x="${ui.pjp13.x}" y="62" animation="progressiveJPDigitsAnim" visible="${ui.pjp13.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim14" x="${ui.pjp14.x}" y="62" animation="progressiveJPDigitsAnim" visible="${ui.pjp14.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim15" x="${ui.pjp15.x}" y="62" animation="progressiveJPDigitsAnim" visible="${ui.pjp15.visible}" />
+				
+				<l:Sprite id="progressive2" x="0" y="105" atlas="progressivePannel2" frameIndex="${ui.progrssive2.frameIndex}" />
+				<l:Label id="progressive2Label" x="4" y="174" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${ui.pjp[2].text.value}" />
+				<l:AnimatingSprite id="pjp_digits_anim20" x="${ui.pjp20.x}" y="167" animation="progressiveJPDigitsAnim" visible="${ui.pjp20.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim21" x="${ui.pjp21.x}" y="167" animation="progressiveJPDigitsAnim" visible="${ui.pjp21.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim22" x="${ui.pjp22.x}" y="167" animation="progressiveJPDigitsAnim" visible="${ui.pjp22.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim23" x="${ui.pjp23.x}" y="167" animation="progressiveJPDigitsAnim" visible="${ui.pjp23.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim24" x="${ui.pjp24.x}" y="167" animation="progressiveJPDigitsAnim" visible="${ui.pjp24.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim25" x="${ui.pjp25.x}" y="167" animation="progressiveJPDigitsAnim" visible="${ui.pjp25.visible}" />
+				
+				<l:Sprite id="progressive3" x="0" y="210" atlas="progressivePannel3" frameIndex="${ui.progrssive3.frameIndex}"/>
+				<l:Label id="progressive3Label" x="4" y="279" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${ui.pjp[3].text.value}" />
+				<l:AnimatingSprite id="pjp_digits_anim30" x="${ui.pjp30.x}" y="272" animation="progressiveJPDigitsAnim" visible="${ui.pjp30.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim31" x="${ui.pjp31.x}" y="272" animation="progressiveJPDigitsAnim" visible="${ui.pjp31.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim32" x="${ui.pjp32.x}" y="272" animation="progressiveJPDigitsAnim" visible="${ui.pjp32.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim33" x="${ui.pjp33.x}" y="272" animation="progressiveJPDigitsAnim" visible="${ui.pjp33.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim34" x="${ui.pjp34.x}" y="272" animation="progressiveJPDigitsAnim" visible="${ui.pjp34.visible}" />
+				<l:AnimatingSprite id="pjp_digits_anim35" x="${ui.pjp35.x}" y="272" animation="progressiveJPDigitsAnim" visible="${ui.pjp35.visible}" />
+			</l:Layer>
+			
+<!-- main reel -->
+			<l:Layer x="0" y="0" zindex="1">
+				<l:Reels id="reels" x="0" y="79" symbolOffset="0,0" zorder="2" 
+					data="${game.response.reels}" 
+					winlinesData="${ui.winline}" 
+					animationMaps="${ui.reels.animationMaps}" 
+					renderOrder="symbol,luckySymbol,winLines,winSymbol,winFrame"
+					onReelStop="onReelStop"
+					>
+					<!--  Row 1  -->
+					<l:Reel id="0" tags="reel0" x="202" y="3" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="0" tags="reel1_sym sym0" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol0.childClipping}" childFrameSet="${ui.reelsymbol0.childFrameSet}" childState="${ui.reelsymbol0.childState}" childAnimation="${ui.reelsymbol0.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="0" midDuration="900" midSpeed="1.2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<l:Reel id="1" tags="reel1" x="347" y="3" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="1" tags="reel2_sym sym1" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol1.childClipping}" childFrameSet="${ui.reelsymbol1.childFrameSet}" childState="${ui.reelsymbol1.childState}" childAnimation="${ui.reelsymbol1.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="50" midDuration="1000" midSpeed="1.2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<l:Reel id="2" tags="reel2" x="491" y="3" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="2" tags="reel3_sym sym2" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol2.childClipping}" childFrameSet="${ui.reelsymbol2.childFrameSet}" childState="${ui.reelsymbol2.childState}" childAnimation="${ui.reelsymbol2.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="100" midDuration="1100" midSpeed="2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<!--  Row 2  -->
+					<l:Reel id="3" tags="reel3" x="202" y="133" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="3" tags="reel4_sym sym3" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol3.childClipping}" childFrameSet="${ui.reelsymbol3.childFrameSet}" childState="${ui.reelsymbol3.childState}" childAnimation="${ui.reelsymbol3.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="0" midDuration="600" midSpeed="2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<l:Reel id="4" tags="reel4" x="347" y="133" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="4" tags="reel5_sym sym4" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol4.childClipping}" childFrameSet="${ui.reelsymbol4.childFrameSet}" childState="${ui.reelsymbol4.childState}" childAnimation="${ui.reelsymbol4.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="50" midDuration="700" midSpeed="2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<l:Reel id="5" tags="reel5" x="491" y="133" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="5" tags="reel6_sym sym5" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol5.childClipping}" childFrameSet="${ui.reelsymbol5.childFrameSet}" childState="${ui.reelsymbol5.childState}" childAnimation="${ui.reelsymbol5.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="100" midDuration="800" midSpeed="2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<!--  Row 3  -->
+					<l:Reel id="6" tags="reel6" x="202" y="263" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="6" tags="reel7_sym sym6" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol6.childClipping}" childFrameSet="${ui.reelsymbol6.childFrameSet}" childState="${ui.reelsymbol6.childState}" childAnimation="${ui.reelsymbol6.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="0" midDuration="1200" midSpeed="2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<l:Reel id="7" tags="reel7" x="347" y="263" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="7" tags="reel8_sym sym7" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol7.childClipping}" childFrameSet="${ui.reelsymbol7.childFrameSet}" childState="${ui.reelsymbol7.childState}" childAnimation="${ui.reelsymbol7.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="50" midDuration="1300" midSpeed="2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<l:Reel id="8" tags="reel8" x="491" y="263" width="106" height="108" symbolBounds="133,118" orientation="verticalDown" >
+						<l:ReelSymbol id="8" tags="reel9_sym sym8" mouseRegion="0, 0, 180, 200" childClipping="${ui.reelsymbol8.childClipping}" childFrameSet="${ui.reelsymbol8.childFrameSet}" childState="${ui.reelsymbol8.childState}" childAnimation="${ui.reelsymbol8.childAnimation}"/>
+						<l:MultiSpeedReelAnimation id="0" types="0,1,2,3,4,5,6" startDelay="100" midDuration="1400" midSpeed="2" endDuration="180" endBounceCount="1" endFinalAmplitude="1" forces="400,300,-0.001" 
+							onReelSlowDown="onReelSlowDown" />
+					</l:Reel>
+					
+					<l:Winlines id="winlines" x="168" y="56" atlas="${ui.winlines.atlas}" />
+				</l:Reels>
+				
+			</l:Layer>
+			
+			<!-- show frames for each win line -->
+			<l:Layer x="0" y="0" zindex="2">
+				<l:Sprite id="messages" x="0" y="0" atlas="winframeAtlas" visible="${ui.winframe.visible}" frameIndex="${ui.winframe.frameIndex}" />
+			</l:Layer>
+			
+			<l:Layer id="progressiveJPAnimationLayer" x="0" y="0" zindex="13" >
+				<l:AnimatingSprite id="animationProgressiveJP" x="170" y="129" width="458" animation="progressiveJPAnimation"  frameSet="animate" autoPlay="false" visible="${ui.progressiveAnimation.visible}" loop="true"/>
+			</l:Layer>
+
+			<!-- SkillGame Component -->
+		  	<l:IncludeIf target="@(game.config.features.GF_PLAY_SKILL_GAME == 'GF_SKIP_SKILL')">
+				<l:ComponentInstance id="skipSkill" type="skipSkill_main" zindex="200" />
+			</l:IncludeIf>
+			
+			<l:IncludeIf target="@(game.config.features.GF_PLAY_SKILL_GAME == 'GF_BAR_SKILL')">
+				<l:ComponentInstance id="skillGame1" type="skillGame1_main" zindex="200" />
+			</l:IncludeIf>
+			
+			<l:IncludeIf target="@(game.config.features.GF_PLAY_SKILL_GAME == 'GF_BAR_SKILL2_VERTICAL')">
+				<l:ComponentInstance id="skillGame2" type="skillGame2_main" zindex="300" />
+			</l:IncludeIf>
+			
+<!-- ** PLEASE DEFINE WIDTH AND HEIGHT FOR ALL SPRITES (height not always necessary for Labels) ** -->
+
+			<!-- All bonus buttons -->
+
+			<l:Layer id="bonusBtns" x="13" y="81" zindex="93">
+				<l:Sprite id="btnBonus0" x="188" y="2" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[0].visible}" mouseUp="selectFreeSpin(0)"/>
+				<l:Label id="btnBonus0Label" x="166" y="8" width="150" atlas="${ui.showBonusGameText[0].atlas}" textAlign="center" text="${ui.btnBonus0.value}" />
+				<l:Sprite id="btnBonus8" x="188" y="2" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[0].visible}"/>
+
+				<l:Sprite id="btnBonus1" x="334" y="2" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[1].visible}" mouseUp="selectFreeSpin(1)"/>
+				<l:Label id="btnBonus1Label" x="314" y="8" width="150" atlas="${ui.showBonusGameText[1].atlas}" textAlign="center" text="${ui.btnBonus1.value}"  />
+				<l:Sprite id="btnBonus8" x="334" y="2" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[1].visible}"/>
+
+				<l:Sprite id="btnBonus2" x="479" y="2" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[2].visible}" mouseUp="selectFreeSpin(2)"/>
+				<l:Label id="btnBonus2Label" x="459" y="8" width="150" atlas="${ui.showBonusGameText[2].atlas}" textAlign="center" text="${ui.btnBonus2.value}" />
+				<l:Sprite id="btnBonus8" x="479" y="2" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[2].visible}"/>
+
+				<l:Sprite id="btnBonus3" x="188" y="133" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[3].visible}" mouseUp="selectFreeSpin(3)"/>
+				<l:Label id="btnBonus3Label" x="166" y="138" width="150" atlas="${ui.showBonusGameText[3].atlas}" textAlign="center" text="${ui.btnBonus3.value}" />
+				<l:Sprite id="btnBonus8" x="188" y="133" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[3].visible}"/>
+
+				<l:AnimatingSprite id="potion" x="334" y="131" animation="bonusPotionAnim" frameSet="${ui.potion.frameSet}" loop="false" visible="${ui.showBonusMorph.visible}" zindex="3"/>
+				<l:Sprite id="morph2" x="334" y="131" bitmap="asset://images/icons/freespin.png" visible="${ui.showBonusMorph2.visible}" zindex="2"/>
+				<l:AnimatingSprite 	id="btnBonus4" x="334" y="131" width="133" height="118" loop="true" autoPlay="true" animation="bonusBtnsAnim" frameSet="@(idle)" visible="${ui.showBonusGame[4].visible}" />
+
+				<l:Sprite id="btnBonus5" x="479" y="133" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[5].visible}" mouseUp="selectFreeSpin(5)" />
+				<l:Label id="btnBonus5Label" x="459" y="138" width="150" atlas="${ui.showBonusGameText[5].atlas}" textAlign="center" text="${ui.btnBonus5.value}" />
+				<l:Sprite id="btnBonus8" x="479" y="133" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[5].visible}"/>
+
+				<l:Sprite id="btnBonus6" x="188" y="262" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[6].visible}" mouseUp="selectFreeSpin(6)"/>
+				<l:Label id="btnBonus6Label" x="166" y="269" width="150" atlas="${ui.showBonusGameText[6].atlas}" textAlign="center" text="${ui.btnBonus6.value}" />
+				<l:Sprite id="btnBonus8" x="188" y="262" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[6].visible}"/>
+
+				<l:Sprite id="btnBonus7" x="334" y="262" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[7].visible}" mouseUp="selectFreeSpin(7)"/>
+				<l:Label id="btnBonus7Label" x="314" y="269" width="150" atlas="${ui.showBonusGameText[7].atlas}" textAlign="center" text="${ui.btnBonus7.value}" />
+				<l:Sprite id="btnBonus8" x="334" y="262" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[7].visible}"/>
+
+				<l:Sprite id="btnBonus8" x="479" y="262" width="133" height="118" bitmap="asset://images/icons/pickme.png" visible="${ui.showBonusGame[8].visible}" mouseUp="selectFreeSpin(8)"/>
+				<l:Label id="btnBonus8Label" x="459" y="269" width="150" atlas="${ui.showBonusGameText[8].atlas}" textAlign="center" text="${ui.btnBonus8.value}" />
+				<l:Sprite id="btnBonus8" x="479" y="262" width="133" height="118" bitmap="asset://images/icons/freespins.png" visible="${ui.showBonusFreeSpins[8].visible}"/>
+			</l:Layer>
+			
+			<l:Layer id="infobar" x="${ui.infobar.x}" y="${ui.infobar.y}" zindex="4">
+				
+				<l:Button id="touchToChangeLabel" x="9" y="310" bitmap="asset://images/touchtochange.png" />
+				<l:Sprite id="denomination" x="32" y="246" width="133" height="64" atlas="denominationsAtlas" frameName="${game.denomination}" enabled="${ui.btnDenomination.enabled}" mouseUp="nextDenom"/>
+				
+				<l:IncludeIf target="@(game.config.features.GF_INFO_PANEL == 'GF_INFO_PANEL_SWEEPS' || game.config.features.GF_INFO_PANEL == null)">					
+					<l:Layer id="Sweeps" x="0" y="0" >
+						<l:Sprite id="entriesPng" x="0" y="0" width="143" height="242" bitmap="asset://images/infobarsFreeEntries.png" />
+	 			
+						<l:Label id="Score1" x="11" y="26" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${game.response.balance}" />
+						<l:Label id="Score2" x="11" y="85" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${ui.current.pointsBalance}" />
+						<l:Label id="Score3" x="11" y="144" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${game.totalEntry}" />
+						<l:Label id="Score4" x="11" y="203" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${ui.current.totalWin}" />
+						
+					</l:Layer>
+					</l:IncludeIf>
+
+				<!--  Free Skill  -->
+					<l:IncludeIf target="@(game.config.features.GF_INFO_PANEL == 'GF_INFO_PANEL_FREE_ENTRIES')">
+		 			<l:Layer id="PromoSkill" x="0" y="0" >
+			 			<l:Sprite id="entriesPng" x="0" y="0" width="143" height="242" bitmap="asset://images/infobarsFreeEntries.png" />
+						<l:Label id="Score1" x="11" y="26" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${game.response.balance}" />
+						<l:Label id="Score2" x="11" y="85" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${ui.current.pointsBalance}" />
+						<l:Label id="Score3" x="11" y="144" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${game.totalEntry}" />
+						<l:Label id="Score4" x="11" y="203" width="117" atlas="infobarDigitsAtlas" textAlign="center" text="${ui.current.totalWin}" />
+					</l:Layer>
+				</l:IncludeIf>
+
+			</l:Layer>
+			
+			<l:Layer id="jackpot_layer" x="555" y="410" zindex="5">
+				<l:Sprite id="mysteryJackpotBigWin" x="90"	y="-17"	atlas="mysteryJackpotAtlas" frameIndex="${ui.jackpot.frameIndex}" />
+			</l:Layer>
+			
+			<l:Layer id="top" x="0" y="0" zindex="5">
+
+				<l:Sprite id="ticketLabel" x="671" y="4" width="41" height="11" bitmap="asset://images/ticket_label.png" visible="${ui.ticketLabel.visible}"/>
+				<l:Label id="ticketNumber" x="715" y="4" width="80" atlas="ticketFontAtlas" textAlign="left" text="${game.response.ticket}" />
+				
+				<l:Sprite id="ncd_recovery" x="777" y="7" width="16" height="16" bitmap="asset://images/ncd.png" visible="${ui.ncd.visible}"/>				 
+			</l:Layer>
+
+			<l:Layer id="indicators" x="0" y="0" zindex="6" >
+				<l:Sprite id="ind0" x="146" y="464" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="145" y="469" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator4.value}" />
+				
+				<l:Sprite id="ind1"  x="146" y="385" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="145" y="390" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator2.value}" />
+				
+				<l:Sprite id="ind2"  x="146" y="255" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="145" y="260" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator0.value}" />
+				
+				<l:Sprite id="ind3"  x="146" y="122" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="145" y="127" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator1.value}" />
+				
+				<l:Sprite id="ind4"  x="146" y="38" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="145" y="43" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator3.value}" />
+				
+				<l:Sprite id="ind5"  x="239" y="38" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="238" y="43" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator5.value}" />
+				
+				<l:Sprite id="ind6"  x="383" y="38" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="382" y="43" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator6.value}" />
+				
+				<l:Sprite id="ind7"  x="528" y="38" width="30" height="30" bitmap="asset://images/indicators/indicator.png" />
+					<l:Label x="527" y="43" width="32" atlas="indicatorDigitsAtlas" textAlign="center" text="${ui.indicator7.value}" />
+			</l:Layer>
+
+		<!-- Main BUTTONS -->
+
+			<l:Layer id="MarqueeMsgs" x="180" y="459" width="440" height="53" zindex="8">
+				<l:AnimatingSprite id="msgInfoBar_ani" x="10" y="0" animation="msgInfoBarAnim"  frameSet="${ui.msgInfobar.frameset}" visible="${ui.msgInfobar.msg.visible}" loop="true" autoPlay="true" />
+				<l:Sprite id="freePlays" x="95" y="6" visible="${ui.freePlays.msg.visible}" bitmap="asset://images/messages/freeplay_popup.png" />
+			</l:Layer>
+			
+			<l:Layer id="buttons" x="${ui.buttons.x}" y="${ui.buttons.y}" zindex="8">
+				<l:Button id="btnBuyTime" x="31" y="21" width="82" height="60" atlas="btnBuyTimeAtlas" enabled="${ui.btnBuyTime.enabled}" visible="${ui.btnBuyTime.visible}" mouseUp="buyTime" />
+				<l:Button id="btnChangeGame" x="104" y="21" width="82" height="60" atlas="btnChangeGameAtlas" enabled="${ui.btnChangeGame.enabled}" visible="${ui.btnChangeGame.visible}" mouseUp="changeGame" />
+				<l:Button id="btnHelp" x="177" y="21" width="82" height="60" atlas="btnHelpAtlas" enabled="${ui.btnHelp.enabled}" visible="${ui.btnHelp.visible}" mouseUp="showHelp" />
+ 				<l:Button id="btnClearAll" x="250" y="21" width="82" height="60" atlas="btnClearAllAtlas" enabled="${ui.btnClearAll.enabled}" visible="${ui.btnClearAll.visible}" mouseUp="clearAll" />
+				
+				<l:Button id="btnEntry0" x="354" y="21" width="47" height="42" atlas="btnEntryLevel0Atlas" enabled="${ui.btnEntryLevel.enabled}" mouseUp="entryLevel(1)" />
+				<l:Button id="btnEntry1" x="401" y="21" width="47" height="42" atlas="btnEntryLevel1Atlas" enabled="${ui.btnEntryLevel.enabled}" mouseUp="entryLevel(2)" />
+				<l:Button id="btnEntry2" x="448" y="21" width="47" height="42" atlas="btnEntryLevel2Atlas" enabled="${ui.btnEntryLevel.enabled}" mouseUp="entryLevel(3)" />
+				<l:Button id="btnEntry3" x="495" y="21" width="47" height="42" atlas="btnEntryLevel3Atlas" enabled="${ui.btnEntryLevel.enabled}" mouseUp="entryLevel(5)" />
+				<l:Button id="btnEntry4" x="542" y="21" width="47" height="42" atlas="btnEntryLevel4Atlas" enabled="${ui.btnEntryLevel.enabled}" mouseUp="entryLevel(10)" />
+				
+				<l:IncludeIf target="@(game.config.features.GF_AUTO_REVEAL == 'GF_ENABLED')">
+					<l:Button id="btnAutoReveal" x="604" y="21" width="82" height="60" atlas="btnAutoRevealAtlas" enabled="${ui.btnAutoReveal.enabled}" visible="${ui.btnAutoReveal.visible}" mouseUp="autoReveal" />
+					<l:Button id="btnAutoStop" x="606" y="23" width="82" height="60" atlas="btnAutoStopAtlas" enabled="${ui.btnAutoStop.enabled}" visible="${ui.btnAutoStop.visible}" mouseUp="autoStop" />
+				</l:IncludeIf>
+				
+				<l:Button id="btnReveal" x="686" y="0" width="87" height="71" atlas="btnRevealAtlas" enabled="${ui.btnReveal.enabled}" visible="${ui.btnReveal.visible}" mouseUp="prePlayGame" />
+				<l:Button id="btnReveal" x="686" y="0" width="87" height="71" atlas="btnRevealAtlas" enabled="${ui.btnRevealFreeSpins.enabled}" visible="${ui.btnRevealFreeSpins.visible}" mouseUp="playFreeGame" />
+				<l:Button id="btnStop" x="686" y="0" width="87" height="71" atlas="btnStopAtlas" enabled="${ui.btnStop.enabled}" visible="${ui.btnStop.visible}" mouseUp="stopGame" />
+			</l:Layer>
+			
+			<l:Layer id="bigWins" x="0" y="200" zindex="10" >
+				<l:AnimatingSprite id="bigWin_anim" x="${ui.bigwin.x}" y="0" animation="bigWinAnim" frameSet="${ui.bigwin.frameset}" loop="false" visible="${ui.bigWin.visible}" />
+				<l:Label x="365" y="68" width="180" atlas="bigwinAtlas" textAlign="center" text="${ui.bigwin.totalWin}"  visible="${ui.bigWin.font.visible}"/>
+			</l:Layer>
+
+			<l:Layer id="messages" zindex="15">
+				<l:Sprite id="messages" x="227" y="240" atlas="msgsAtlas" visible="${ui.messages.visible}" frameIndex="${ui.messages.frameIndex}" />
+			</l:Layer>
+
+			<l:Layer id="buytime_msg" zindex="15">
+				<l:Sprite id="buytimeMsg" x="60" y="380" atlas="buytimeMsgAtlas" visible="${ui.buytimeMsg.visible}"  frameIndex="${ui.buytimeMsg.frameIndex}"/>
+			</l:Layer>
+			
+			<l:Layer id="jackpot" x="0" y="0" visible="${ui.jackpot.visible}" zindex="18" >
+				<l:AnimatingSprite id="highlight_left" x="76" y="24" width="" height="" visible="${ui.jackpot.highlights.visible}" animation="jackpotHighlightAnim" loop="true" autoPlay="true" />
+				<l:AnimatingSprite id="highlight_right" x="630" y="24" width="" height="" visible="${ui.jackpot.highlights.visible}" animation="jackpotHighlightAnim" loop="true" autoPlay="true" />
+				<l:AnimatingSprite id="jackpot_main" x="7" y="${ui.jackpot.y}" animation="jackpotAnim" loop="true" autoPlay="true" />
+				<l:Label id="jackpot_label" x="116" y="286" width="568" atlas="jackpotBigFontAtlas" textAlign="center" text="${ui.jackpot.amount}"  format="${ui.jackpotFormat}" />
+			</l:Layer>
+			
+			<l:Sound id="jackpot_music" data="asset://../../../../Common/001/SharedGames//JPot/jackpot123.mp3" autoPlay="false" loop="false" />
+			
+		</l:Scene>
+
+	<!-- HELP SCENE -->
+
+		<l:Scene id="helpScene">
+		
+			<l:Sprite id="helpBackground" x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/background.png" />
+			
+			<l:IncludeIf target="@(game.config.features.GF_VENDOR_CODE == 'GF_VC_1' || game.config.features.GF_VENDOR_CODE == null)"> 
+				<l:Layer id="helpButtons" x="23" y="75" zindex="1">
+					<l:Button id="btnGeneralRules" 	x="0" y="64" width="132" height="55" atlas="btnGeneralRulesAtlas" mouseUp="showHelpSection(allHelpPages,first)" enabled="${ui.help.button.generalHelp}"/>
+					<l:Button id="btnWintable" 		x="0" y="150" width="132" height="55" atlas="btnWintableAtlas"  mouseUp="showHelpSection(wintableHelp)" enabled="${ui.help.button.wintableHelp}"/>
+					<l:Button id="btnReturn"		x="0" y="370"	width="132" height="134" atlas="btnReturnAtlas" mouseUp="exitHelp"/> 				
+					<l:Button id="btnPreviousPage"  x="206" y="465" width="132" height="55" atlas="btnPreviousPageAtlas" mouseUp="prevNextHelpPage(,previous)" />
+					<l:Button id="btnNextPage"	  x="595" y="465" width="132" height="55" atlas="btnNextPageAtlas" mouseUp="prevNextHelpPage(,next)" />
+				</l:Layer>
+			</l:IncludeIf>
+			
+			<l:IncludeIf target="@(game.config.features.GF_VENDOR_CODE == 'GF_VC_2')"> 
+				<l:Layer id="helpButtons" x="40" y="75" zindex="1">
+					<l:Button id="btnGeneralRules" 	x="0" y="0" width="132" height="55" atlas="btnGeneralRulesAtlas" mouseUp="showHelpSection(allHelpPages,first)" enabled="${ui.help.button.generalHelp}"/>
+					<l:Button id="btnWintable" 		x="0" y="94" width="132" height="55" atlas="btnWintableAtlas"  mouseUp="showHelpSection(wintableHelp)" enabled="${ui.help.button.wintableHelp}"/>
+					<l:Button id="btnReturn"		x="0" y="370"	width="132" height="134" atlas="btnReturnAtlas" mouseUp="exitHelp"/> 				
+					<l:Button id="btnPreviousPage"  x="190" y="455" width="132" height="55" atlas="btnPreviousPageAtlas" mouseUp="prevNextHelpPage(,previous)" />
+					<l:Button id="btnNextPage"	  x="610" y="455" width="132" height="55" atlas="btnNextPageAtlas" mouseUp="prevNextHelpPage(,next)" />
+				</l:Layer>
+			</l:IncludeIf>
+			
+			<l:HelpPages id="helpPages" x="180" y="0" nextButton="btnNextPage" previousButton="btnPreviousPage" navigationAlwaysOn="false">
+				
+				<l:Layer id="allHelpPages">
+					<!--  Sweeps  -->
+					<l:IncludeIf target="@(game.config.features.GF_HELP == 'GF_HELP_SWEEPS' || game.config.features.GF_HELP == null)"> 
+						<l:Layer id="page0">
+							<l:Sprite x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/headings/heading_generalrules.png" />  
+							<l:Sprite x="0" y="64" bitmap="asset://help/Help_00.png" />						
+						</l:Layer>
+						
+						<l:Layer id="page1">
+							<l:Sprite x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/headings/heading_generalrules.png" /> 
+							<l:Sprite x="0" y="64" bitmap="asset://help/Help_13.png" />							
+						</l:Layer>
+						
+						<l:Layer id="page2">
+							<l:Sprite x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/headings/heading_button_panel.png" /> 
+							<l:Sprite x="0" y="64" bitmap="asset://help/Help_20.png" />
+						</l:Layer>
+						
+						<l:Layer id="page3">
+							<l:Sprite x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/headings/heading_button_panel.png" /> 
+							<l:Sprite x="0" y="64" bitmap="asset://help/Help_21.png" />
+						</l:Layer>
+						
+						<l:Layer id="page4">
+							<l:Sprite x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/headings/heading_bigwin.png" /> 
+							<l:Sprite x="0" y="64" bitmap="asset://help/Help_30.png" />
+						</l:Layer>
+						
+						<l:Layer id="page5">
+							<l:Sprite x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/headings/heading_bonus_freespin.png" />
+							<l:Sprite x="0" y="64" bitmap="asset://help/Help_31.png" />
+						</l:Layer>
+					</l:IncludeIf>
+			  	</l:Layer>
+				
+				<l:Layer id="wintableHelp">
+					<l:Layer id="page99">
+						<l:Sprite x="0" y="0" bitmap="asset://../../../../Common/001/Help/@(game.config.features.GF_HELP)/@(game.config.features.GF_VENDOR_CODE)/headings/heading_wintable.png" />
+						<l:Sprite id="" x="0" y="64" bitmap="asset://help/Help_60.png" />
+
+						<!-- Column 1 -->  
+ 						<l:Label id="win10_5" x="150" y="132" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[0,3].win}" />
+
+						<l:Label id="win1_5" x="150" y="204" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[1,3].win}" />
+
+						<l:Label id="win2_5" x="150" y="269" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[2,3].win}" />
+
+						<l:Label id="win3_5" x="150" y="336" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[3,3].win}" />
+
+						<l:Label id="win4_5" x="150" y="407" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[4,3].win}" />
+
+						<l:Label id="win4_5" x="150" y="473" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[5,3].win}" />
+
+						<!-- Column 2 -->					
+						<l:Label id="win5_5" x="450" y="132" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[5,2].win}" />
+
+						<l:Label id="win6_5" x="450" y="204" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${game.paytable[5,1].win}" />
+
+						<l:Label id="win7_5" x="450" y="269" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${ui.hlp.wintable9of}" />
+
+						<l:Label id="win8_5" x="450" y="336" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${ui.hlp.wintable8of}"/>
+
+						<l:Label id="win0_5" x="450" y="407" width="144" height="15" atlas="helpFontAtlas" textAlign="center" text="${ui.hlp.wintable7of}"/>
+
+					</l:Layer>
+				</l:Layer>
+			</l:HelpPages>
+
+			<l:Sound id="return_button_snd" data="asset://sounds/click.mp3" autoPlay="false" loop="false" />
+			<l:Sound id="help_buttons_snd" data="asset://sounds/click.mp3" autoPlay="false" loop="false" />
+			
+		</l:Scene>
+
+	</l:Scenes>
+
+	<ac:Root>
+
+		<ac:Seq id="start">
+			<ac:SetModelValue target="ui.ticketLabel.visible" value="@(false)" />
+			
+			<ac:SetModelValue target="ui.freePlays.msg.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.progressiveAnimation.visible" value="@(false)" />
+
+			<ac:SetModelValue target="ui.skillgame.totalWin" value="@(0)"/>
+			
+			<!-- DEMO MENU -->
+			<ac:SetModelValue target="demoMenuTitle.frameindex" value="0" />
+			<ac:SetModelValue target="demoMenu.visible" value="@(false)" />
+
+			<ac:SetModelValue target="ui.jackpot.frameIndex" value="@(1)" />
+			<ac:SetModelValue target="ui.progrssive1.frameIndex" value="@(2)" />
+			<ac:SetModelValue target="ui.progrssive2.frameIndex" value="@(1)" />
+			<ac:SetModelValue target="ui.progrssive3.frameIndex" value="@(1)" />
+			
+			<ac:SetModelValue target="ui.hlp.wintable7of" value="@(400)" />
+			<ac:SetModelValue target="ui.hlp.wintable8of" value="@(4000)" />
+			<ac:SetModelValue target="ui.hlp.wintable9of" value="@(8000)" />
+
+			<ac:Loop from="0" to="8">
+				<ac:SetModelValue target="ui.showBonusGame[_index].visible" value="@(false)" />
+			</ac:Loop>
+
+			<ac:SetModelValue target="ui.messageShow" value="@(0)" /><!-- to start the counter, on the 3rd time it show promo code instead of good luck message -->
+			<ac:SetModelValue target="ui.msgInfobar.msg.visible" value="@(false)" />
+			
+			<!-- variables to show the win frames -->
+			<ac:SetModelValue target="ui.winframe.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.winframe.frameIndex" value="@(0)" />
+			
+			<ac:SetModelValue target="ui.animateIndicator" value="@(false)" />
+			
+			<ac:SetModelValue target="ui.ncd.visible" value="@(false)" />
+			<ac:SetModelValue target="recoveryMode" value="@(false)" />
+
+			<ac:SetModelValue target="ui.winline" value="=@(null)" />
+			<ac:SetModelValue target="ui.autoplay" value="@(false)" />						
+			<ac:SetModelValue target="ui.spinning" value="@(false)" />
+			<ac:SetModelValue target="ui.complete" value="@(true)" />
+			<ac:SetModelValue target="ui.freespinsMode" value="@(false)" />
+
+			<ac:SetModelValue target="ui.freespinSymbol" value="8" />
+
+			<ac:SetModelValue target="ui.jackpot.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.jackpot.highlights.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.jackpot.amount" value="" />
+			<ac:SetModelValue target="ui.jackpotFormat" value="money" />
+
+			<ac:RegisterBinding target="game.response.pointsBalance" action="updateWinPoints"/>
+			<ac:RegisterBinding target="game.response.bonuses['1']" action="updatePJP" />
+			<ac:RegisterBinding target="game.response.ticket" action="updateTicketValue"/>
+			
+			<ac:RegisterBinding target="game.response.ticketWin" action="updateInfobarDisplay"/>
+			
+				<ac:SetModelValue target="ui.game.startSpin" value="@(false)" />
+			<ac:SetModelValue target="ui.game.endGame" value="@(true)" />
+
+			<!--  button states -->
+			<ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnBuyTime.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnChangeGame.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnChangeGame.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnHelp.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnHelp.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnDenomination.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnClearAll.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnEntryLevel.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnAutoStop.enabled" value="@(true)"/>			
+			<ac:SetModelValue target="ui.btnAutoStop.visible" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnStop.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnStop.visible" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnReveal.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnReveal.visible" value="@(true)"/>
+			
+			<ac:SetModelValue target="ui.current.pointsBalance" value="@(game.response.pointsBalance)"/>
+			<ac:SetModelValue target="ui.current.totalWin" value="@(game.response.totalWin)"/>
+
+			<ac:SetModelValue target="ui.mainBkg.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.infobar.x" value="1"/>
+			<ac:SetModelValue target="ui.infobar.y" value="177"/>
+			<ac:SetModelValue target="ui.infoMessage" value="Classique 7's" />
+			<ac:SetModelValue target="ui.buttons.x" value="0"/>
+			<ac:SetModelValue target="ui.buttons.y" value="500"/>
+			
+			<ac:SetModelValue target="ui.messages.visible" value="@(false)"/>
+			<ac:SetModelValue target="ui.messages.frameIndex" value="1"/>
+			
+			<ac:SetModelValue target="ui.buytimeMsg.visible" value="@(false)"/>
+			<ac:SetModelValue target="ui.buytimeMsg.frameIndex" value="0"/>
+			
+			<ac:SetModelValue target="ui.bigWin.visible" value="@(false)"/>
+			<ac:SetModelValue target="ui.bigwin.frameset" value="static"/>
+			<ac:SetModelValue target="ui.bigwin.x" value="-300"/>
+			<ac:SetModelValue target="ui.bigWin.font.visible" value="@(false)"/>
+			<ac:SetModelValue target="ui.bigwin.totalWin" value="0"/>
+
+			<!--  pay line indicators -->
+			<ac:SetModelValue target="ui.indicator.value" value="" />
+
+			<ac:SetModelValue target="ui.reels.animationMaps" value="@({symbol: 'symbol?anim', winFrame: 'winframeAnim'})"/>
+			
+			<ac:Loop from="0" to="(game.cols * game.rows)-1">
+				 <ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=static"/>
+				 <ac:SetModelValue target="ui.reelsymbol@(_index).childState" value="symbol=true,luckySymbol=false"/>
+				 <ac:SetModelValue target="ui.reelsymbol@(_index).childClipping" value="symbol=true"/>
+			</ac:Loop>
+			
+			<ac:Loop from="1" to="3" >
+				<ac:SetModelValue target="ui.pjp[_index].frameIndex" value="@(3)" />
+				
+				<ac:SetModelValue target="temp_index" value="@(_index)" />
+				<ac:Loop from="0" to="5" >
+					<ac:SetModelValue target="ui.pjp@(temp_index)@(_index).visible" value="@(false)" />
+					<ac:SetModelValue target="ui.pjp@(temp_index)@(_index).x" value="0" />
+				</ac:Loop>
+			</ac:Loop>
+			<ac:SetModelValue target="ui.pjp[1].text.value" value="" />
+			<ac:SetModelValue target="ui.pjp[2].text.value" value="" />
+			<ac:SetModelValue target="ui.pjp[3].text.value" value="" />
+			
+			<ac:Call target="updatePJPAnim(1)" />
+			<ac:Call target="updatePJPAnim(2)" />
+			<ac:Call target="updatePJPAnim(3)" />
+			
+			<ac:ExecuteProtocol command="StartGame" param="" />
+			
+			
+			<ac:Call target="switchToMainScene" fork="true"/>
+			
+			<ac:SetModelValue target="ui.winlines.atlas" value="allWinLinesAtlas" />
+			<ac:Call target="displayWinlines" />
+			
+		</ac:Seq>
+		<ac:Seq id="switchToMainScene">
+			<ac:SwitchScene target="main" />
+
+			<ac:SetModelValue target="ui.autoplay" value="@(false)" />
+			<ac:SetModelValue target="ui.spinning" value="@(false)" />
+			<ac:Call target="resetButtons"/>
+			<ac:Call target="resetSymbols"/>
+			<ac:Trigger target="animationProgressiveJP" command="play" />
+			<!--  Start idle engine -->
+			<ac:Call target="idleEngine" fork="true" />
+			<ac:Call target="idleWinLines" fork="true" />
+			<ac:Call target="ShowInfoBarMsg(0)" />
+		</ac:Seq>
+		<ac:Seq id="updateWinPoints">
+			<!--  Todo: If an external jackpot has triggered, winpoints won't be current!  -->
+			<ac:Debug message="updateWinPoints" />
+			<ac:IfElse target="@(ui.spinning == false)">
+			  <ac:Seq>
+				<ac:SetModelValue target="ui.current.pointsBalance" value="@(game.response.pointsBalance)"/>
+				<ac:Call target="updateBuyTime" />
+			  </ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="updateBuyTime">
+			<ac:Debug message="updateBuyTime" />
+			<ac:SetModelValue target="ui.messages.visible" value="@(false)"/>
+			<ac:Debug message="game.response.pointsBalance:@(game.response.pointsBalance)" />
+			<ac:IfElse target="@(game.response.pointsBalance &lt; 1)">
+			  <ac:Seq>
+				 <ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(false)"/>
+			  </ac:Seq>
+			  <ac:Seq>
+				 <ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(true)"/>
+			  </ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="blocker">
+			<ac:Debug message="blocker" />
+			<!-- this does nothing. Use it to block mouse clicks -->		
+		</ac:Seq>
+
+<!-- button functions -->
+		<ac:Seq id="prePlayGame">
+			<ac:Trigger target="reveal_snd" command="play" fork="true"/>
+			<ac:Delay target="350" />
+			<ac:Trigger target="reveal_snd" command="stop" />
+			<ac:Call target="playGame" />
+		</ac:Seq>
+		<ac:Seq id="playGame">
+			<ac:SetModelValue target="ui.winlines.atlas" value="" />
+			<ac:IfElse target="@(game.entryLevel == 0)" >
+				<ac:Call target="showMessage(1)"/>
+				<ac:Seq>
+					<ac:IfElse target="@(game.response.balance &lt; game.totalEntry)">
+						<ac:Seq>
+							<ac:SetModelValue target="ui.autoplay" value="@(false)"/>
+							<ac:Call target="resetButtons"/>
+							<ac:Call target="showMessage(0)" />
+						</ac:Seq>
+						<ac:Call target="startSpin" fork="true" />
+					</ac:IfElse>
+				</ac:Seq>
+			</ac:IfElse>
+ 			<ac:Checkpoint />
+		</ac:Seq>
+		
+		<ac:Seq id="playFreeGame">
+			<ac:Trigger target="reveal_snd" command="play" fork="true"/>
+			<ac:Delay target="350" />
+			<ac:Trigger target="reveal_snd" command="stop" />
+			
+			<ac:SetModelValue target="ui.winlines.atlas" value="" />
+			<ac:SetModelValue target="ui.winframe.visible" value="@(false)" />
+
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(false)" />
+			<ac:SetModelValue target="ui.btnHelp.enabled" value="@(true)" />
+			
+			<ac:Call target="SpinSequence" fork="true"/>
+		</ac:Seq>
+
+		<ac:Seq id="autoReveal" >
+			<ac:SetModelValue target="ui.winlines.atlas" value="" />
+			
+			<ac:Trigger target="auto_reveal_snd" command="play" fork="true"/>
+			
+			<ac:IfElse target="@(ui.autoplay == false)" >
+				<ac:Seq>
+					<ac:IfElse target="@(game.entryLevel &gt; 0)" >
+						<ac:Seq>
+							<ac:SetModelValue target="ui.autoplay" value="@(true)" />
+							<ac:SetModelValue target="ui.btnAutoStop.visible" value="@(true)" /> 
+							<ac:SetModelValue target="ui.btnAutoStop.enabled" value="@(true)" />
+						</ac:Seq>
+					</ac:IfElse>
+					
+					<ac:IfElse target="@(ui.spinning==false && ui.complete==true)" >
+						<ac:Call target="playGame" />
+					</ac:IfElse>
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="autoStop">
+			<ac:SetModelValue target="ui.autoplay" value="@(false)"/>
+			<ac:Trigger target="auto_reveal_snd" command="play" fork="true"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(true)"/>	
+			<ac:SetModelValue target="ui.btnAutoStop.visible" value="@(false)"/>			
+		</ac:Seq>
+		<ac:Seq id="stopGame">
+<!-- 		<ac:SetModelValue target="ui.btnStop.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.btnReveal.visible" value="@(true)" />
+			<ac:SetModelValue target="ui.btnReveal.enabled" value="@(false)" />
+			<ac:Set>
+				<ac:Trigger target="reels" command="finish" />
+ 				<ac:Trigger target="jackpotLeft" command="stop"/>
+	 			<ac:Trigger target="jackpotRight" command="stop"/>
+ 			</ac:Set>
+ 			<ac:Debug message="stopGame FINISHED"/>
+ 			 -->
+		</ac:Seq>
+		<ac:Seq id="displayWinlines" >
+			<ac:SetModelValue target="ui.winlines.atlas" value="allWinLinesAtlas" />
+			<ac:SetLocalValue target="winlinesarray" value="@([])" />
+			<ac:InterruptibleRegion target="displayWinlines" >
+				<ac:Loop from="0" to="29" >
+					<ac:SetLocalArray target="winlinesarray" append="@(_index)"/>
+					<ac:SetModelValue target="ui.winline" value="@(winlinesarray)" />
+				</ac:Loop>
+			</ac:InterruptibleRegion>
+		</ac:Seq>
+		<ac:Seq id="buyTime">
+  			<ac:InterruptRegion target="showBuytime" />
+  			
+  			<ac:Trigger target="generic_button_snd" command="play" fork="true" />
+ 			
+  			<ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(false)"/>
+  			
+ 			<ac:ExecuteProtocol command="BuyPhoneTime" param="" />
+			<ac:SetModelValue target="ui.current.pointsBalance" value="@(game.response.pointsBalance)"/>
+			<ac:Call target="resetButtons" />
+			
+			<ac:InterruptibleRegion target="showBuytime">
+				<ac:Seq>
+				  <ac:SetModelValue target="ui.buytimeMsg.visible" value="@(true)"/>
+				  <ac:Delay target="2000" />
+				  <ac:SetModelValue target="ui.buytimeMsg.visible" value="@(false)" />	
+				</ac:Seq>
+			</ac:InterruptibleRegion>
+ 		</ac:Seq>
+		<ac:Set id="changeGame">
+			<ac:Trigger target="generic_button_snd" command="play" fork="true" />
+			<ac:InterruptRegion target="showingWinLines" />
+			<ac:ExecuteProtocol command="ChangeGame" param="" />	
+		</ac:Set>
+		<ac:Seq id="nextDenom">
+			<ac:InterruptRegion target="showingWinLines" />
+			<ac:SetModelValue target="ui.skillgame.totalWin" value="@(0)"/>
+			<ac:SetModelValue target="ui.messages.visible" value="@(false)"/>				
+			<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.winframe.visible" value="@(false)" />
+			
+			<ac:ExecuteProtocol command="NextDenom" param="" />
+			
+			<ac:Trigger target="entries@(game.denomination)_snd" command="play" fork="true" />
+			
+			<ac:Call target="resetSymbols" />
+			
+			<ac:Call target="setIndicatorValue(,0)"/>			
+			<ac:SetModelValue target="ui.current.totalWin" value="@(0)" />			  
+			<ac:SetModelValue target="ui.winline" value="" />
+		</ac:Seq>
+		<ac:Seq id="entryLevel" params="levelIndex">
+			<ac:InterruptRegion target="showingWinLines" />
+			<ac:InterruptRegion target="showingWinScatters" />
+			<ac:SetModelValue target="ui.skillgame.totalWin" value="@(0)"/>
+
+			<ac:SetModelValue target="ui.messages.visible" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(true)"/>
+			
+			<ac:SetModelValue target="ui.winframe.visible" value="@(false)" />
+			
+			<ac:SetModelValue target="ui.hlp.wintable7of" value="@(400*levelIndex*game.denomination)" />
+			<ac:SetModelValue target="ui.hlp.wintable8of" value="@(4000*levelIndex*game.denomination)" />
+			<ac:SetModelValue target="ui.hlp.wintable9of" value="@(8000*levelIndex*game.denomination)" />
+			
+			<ac:IfElse target="@(levelIndex==10)">
+				<ac:Seq>
+					<ac:SetModelValue target="ui.progrssive2.frameIndex" value="@(2)" />
+					<ac:SetModelValue target="ui.progrssive3.frameIndex" value="@(2)" />
+					<ac:SetModelValue target="ui.jackpot.frameIndex" value="@(0)" />
+				</ac:Seq>
+				<ac:Seq>
+					<ac:SetModelValue target="ui.progrssive2.frameIndex" value="@(1)" />
+					<ac:SetModelValue target="ui.progrssive3.frameIndex" value="@(1)" />
+					<ac:SetModelValue target="ui.jackpot.frameIndex" value="@(1)" />
+				</ac:Seq>
+			</ac:IfElse>
+			
+			<ac:ExecuteProtocol command="SetEntryLevel" param="@(levelIndex)"/>
+
+			<ac:Trigger target="entrylevel@(game.entryLevelIndex)_snd" command="play" fork="true" />
+
+			<ac:Call target="setIndicatorValue(@(game.entryLevel*game.denomination),0)"/>
+			<ac:SetModelValue target="ui.current.totalWin" value="@(0)" />
+		</ac:Seq>
+		<ac:Seq id="clearAll">
+			<ac:InterruptRegion target="showingWinLines" />
+			<ac:SetModelValue target="ui.skillgame.totalWin" value="@(0)"/>
+			<ac:SetModelValue target="ui.messages.visible" value="@(false)"/>	
+			<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.winframe.visible" value="@(false)" />
+			
+			<ac:ExecuteProtocol command="ClearAll" param="" />
+			
+			<ac:Call target="resetSymbols" />			
+			<ac:Call target="setIndicatorValue(,0)"/>
+ 
+			<ac:SetModelValue target="ui.current.totalWin" value="@(0)" />		
+			
+			<ac:Trigger target="generic_button_snd" command="play" fork="true"/>
+		</ac:Seq>
+
+		<ac:Seq id="showHelp">
+			<ac:SetModelValue target="ui.idleFlag" value="@(false)" />
+			<ac:InterruptRegion target="showingWinLines" />
+			
+			<ac:Checkpoint />
+			<ac:Debug message="Check Point ====== 12a" />
+			
+			<ac:Trigger target="generic_button_snd" command="play" fork="true" />
+			<ac:Delay target="200" />
+			
+			<ac:SwitchScene target="helpScene" />
+			
+			<ac:SetModelValue target="ui.help.button.generalHelp" value="@(false)"/>
+			<ac:SetModelValue target="ui.help.button.wintableHelp" value="@(true)"/>
+			
+			<ac:SetModelValue target="ui.help.previous.section" value="generalHelp"/>
+			<ac:SwitchHelpSection target="helpPages" section="allHelpPages" page="first"/>
+			
+			<ac:Checkpoint />
+			<ac:Debug message="Check Point ====== 12b" />
+		</ac:Seq>
+		<ac:Seq id="prevNextHelpPage" params="section,page">
+			<ac:Trigger target="help_buttons_snd" command="play" fork="true" />
+			<ac:SwitchHelpSection id="switchHelpSection" target="helpPages" section="@(section)" page="@(page)"/>
+		</ac:Seq>
+		<ac:Seq id="exitHelp">
+			<ac:Trigger target="return_button_snd" command="play" fork="true" />
+			<ac:Delay target="200" />
+			<ac:Set>
+				<ac:Call target="switchToMainScene" />
+				<ac:Checkpoint />
+				<ac:Debug message="Check Point ====== Help4" />
+			</ac:Set>			  
+		</ac:Seq>
+		<ac:SwitchHelpSection id="switchHelpSection" params="section,page" target="helpPages" section="@(section)" page="@(page)"/>
+		<ac:Seq id="showHelpSection" params="section,page">
+			<ac:Trigger target="help_buttons_snd" command="play" fork="true" />
+			<ac:SetModelValue target="ui.help.button.@(ui.help.previous.section)" value="@(true)"/>
+			<ac:SetModelValue target="ui.help.button.@(section)" value="@(false)"/>
+			<ac:SetModelValue target="ui.help.previous.section" value="@(section)"/>
+			
+			<ac:SwitchHelpSection id="switchHelpSection" target="helpPages" section="@(section)" page="@(page)"/>
+			<ac:Checkpoint />
+			<ac:Debug message="Check Point ====== Help2" />  
+		</ac:Seq>
+<!-- button end-->
+
+
+		<ac:Seq id="resetButtons">
+			<ac:IfElse target="@(game.entryLevel == 0)" >
+				<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(false)"/>
+				<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(true)"/>
+			</ac:IfElse>
+			
+			<ac:IfElse target="@(game.response.pointsBalance &lt; 1)" >
+				<ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(false)"/>
+				<ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(true)"/>
+ 			</ac:IfElse>
+ 			
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.visible" value="@(false)"/>
+			
+			<ac:SetModelValue target="ui.btnChangeGame.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnHelp.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnDenomination.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnEntryLevel.enabled" value="@(true)"/>
+			
+			<ac:Debug message="game.entryLevel: @(game.entryLevel)" />
+			
+  		 	<ac:SetModelValue target="ui.btnReveal.visible" value="@(true)" />
+			<ac:SetModelValue target="ui.btnReveal.enabled" value="@(true)" />
+			<ac:SetModelValue target="ui.btnStop.visible" value="@(false)" />		
+			
+			<ac:IfElse target="@(ui.autoplay == false)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(true)"/>
+					<ac:SetModelValue target="ui.btnAutoStop.visible" value="@(false)"/>
+					<ac:SetModelValue target="ui.btnAutoStop.enabled" value="@(false)"/>
+				</ac:Seq>
+				<ac:Seq>
+					<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(false)"/>
+					<ac:SetModelValue target="ui.btnAutoStop.visible" value="@(true)"/>
+					<ac:SetModelValue target="ui.btnAutoStop.enabled" value="@(true)"/>
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="offButtons">
+			<ac:Debug message="offButtons-----------------------"/>
+			
+			<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnChangeGame.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnHelp.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnDenomination.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnEntryLevel.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnReveal.enabled" value="@(false)" />
+			<ac:SetModelValue target="ui.btnStop.visible" value="@(false)" />
+			
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.visible" value="@(false)"/>
+			
+			<!--  review if these turn off when they shouldn't 
+			  <ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(false)"/>
+			  <ac:SetModelValue target="ui.btnAutoStop.visible" value="@(false)"/>
+			  <ac:SetModelValue target="ui.btnAutoStop.enabled" value="@(false)"/>
+				-->
+			
+		</ac:Seq>
+		<ac:Seq id="recoverGame">
+			<ac:Debug message="recoverGame Seq"/>
+			<ac:SetModelValue target="ui.ncd.visible" value="@(true)" />
+			<ac:Call target="offButtons"/>
+			
+			<ac:SetModelValue target="recoveryMode" value="@(true)" />
+			
+			<ac:IfElse target="@(game.response.freespins.counter &gt; 0)" >
+				<ac:Call target="recoverFreespins" />
+			</ac:IfElse>
+			
+			<ac:Call target="setDefaults" />
+			<ac:Call target="ContinueSpinSequence" fork="true"/>
+
+			<ac:Delay target="3000"/>
+			<ac:SetModelValue target="ui.ncd.visible" value="@(false)" />
+		</ac:Seq>
+ 		<ac:Seq id="setDefaults">
+			<ac:Debug message="setDefaults"/>
+
+			<ac:SetModelValue target="ui.spinning" value="@(true)" />
+			<ac:SetModelValue target="ui.complete" value="@(false)" />
+			<ac:SetModelValue target="ui.messages.visible" value="@(false)"/>
+			
+			<ac:InterruptRegion target="showingWinLines" />
+			<ac:InterruptRegion target="bigWinDisplay" />
+			<ac:SetModelValue target="ui.idleFlag" value="@(false)" />
+			
+			<ac:Call target="setIndicatorValue(@(game.entryLevel*game.denomination),0)"/>
+			
+			<ac:SetModelValue target="didWeWin" value="0" />
+			<ac:SetModelValue target="ui.bonusSymbolCount" value="@(0)" />
+			
+			<ac:SetModelValue target="ui.btnBuyTime.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnChangeGame.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnHelp.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnDenomination.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnEntryLevel.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnReveal.enabled" value="@(false)" />
+			
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.visible" value="@(false)"/>
+		</ac:Seq>
+
+
+
+
+		<ac:Seq id="startSpin">
+			<ac:Call target="setDefaults" />
+			<ac:SetModelValue target="ui.game.startSpin" value="@(true)" />
+			<ac:SetModelValue target="ui.winframe.visible" value="@(false)" />
+			<ac:Call target="ShowInfoBarMsg(1)" fork="true"/>
+			<ac:Call target="startSpinJoin" />
+ 		</ac:Seq>
+		<ac:Seq id="startSpinJoin">
+			<ac:IfElse target="@(ui.game.startSpin == true &amp;&amp; ui.game.endGame == true)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.game.startSpin" value="@(false)" />
+					<ac:SetModelValue target="ui.game.endGame" value="@(false)" />
+					<ac:Call target="SpinSequence" />
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+ 		<ac:Seq id="SpinSequence" >
+			<ac:Trigger target="big_win_snd" command="stop"/>
+			<ac:Checkpoint />
+
+			<ac:SetModelValue target="ui.winline" value="" /> 			
+			<ac:SetModelValue target="ui.infoMessage" value="Good Luck!" />
+			<ac:Call target="clear_jackpot" />
+
+			<!--  Pre-Spin  -->
+			<ac:Call target="PreSpinSequence" />
+			<ac:SetModelValue target="ui.btnStop.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnStop.visible" value="@(false)"/>
+
+			<!--  Reset Total Win  -->
+			<ac:IfElse target="@(ui.freespinsMode==false)">
+				<ac:SetModelValue target="ui.current.totalWin" value="0" />
+			</ac:IfElse>
+			
+			<ac:IfElse target="@(game.config.features.GF_MYSTERY_WIN == 'GF_MYSTERY_WIN_ENABLED')">
+				<ac:Call target="display_jackpot_icon7sAnim" fork="true" />
+			</ac:IfElse>
+				
+			<!--  Spin Reels  -->
+
+			<ac:IfElse target="@(ui.freespinsMode == true)" >
+				<ac:Trigger target="freeSpinReel_snd" command="play" fork="true"/>
+				<ac:Trigger target="spinReel_snd" command="play" fork="true"/>
+			</ac:IfElse>
+			
+			<ac:Call target="ContinueSpinSequence" fork="true"/>
+ 		</ac:Seq>
+		<ac:Seq id="PreSpinSequence" >
+			<ac:Call target="resetSymbols" />
+			
+			<ac:Loop from="0" to="8" >
+				<ac:SetModelValue target="ui.reelsymbol@(_index).childState" value="symbol=true,winframe=false" />
+				<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=static" />
+				<ac:SetModelValue target="ui.reelsymbol@(_index).childClipping" value="symbol=true,winframe=true" />
+				<ac:Trigger target="sym@(_index)" command="stop" />
+			</ac:Loop>
+
+			<ac:Loop from="0" to="8" >
+				<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=static" />
+			</ac:Loop>
+		</ac:Seq>
+		<ac:Seq id="ContinueSpinSequence" >
+			<ac:Set>
+				<ac:IfElse target="@(recoveryMode == false)">
+					<ac:Trigger target="reels" command="play" />
+				</ac:IfElse>
+				
+				<ac:Call target="StartSpinAnimation" fork="true"/>
+
+				<ac:Seq> 
+					<ac:IfElse target="@(game.response.freespins.totalspins &gt; 0 || game.response.multiplier.counter == 1)">
+						<ac:Seq>  
+						  <ac:Delay target="100"/>
+						  <ac:ExecuteProtocol command="ContinuePlay" param="MUNIT=POINTS" />
+						</ac:Seq>
+						<ac:Seq>
+						  <ac:Delay target="100"/>
+						  <ac:ExecuteProtocol command="PlayGame" param="MUNIT=POINTS" />
+						</ac:Seq>
+					</ac:IfElse>
+				</ac:Seq>
+	 		</ac:Set>
+	 		<ac:Trigger target="reels" command="stop" />
+	 		<ac:SetModelValue target="recoveryMode" value="@(false)" />
+
+			<ac:IfElse target="@(game.config.features.GF_MYSTERY_WIN == 'GF_MYSTERY_WIN_ENABLED')">
+				<ac:Call target="stop_jackpot_icon7sAnim"/>
+			</ac:IfElse>
+				
+				
+	 		<ac:Checkpoint />
+
+	  		<!--  Post Spin 2 -->
+	  		<ac:SetModelValue target="ui.infoMessage" value=""/>
+
+	  		<!--  Trigger Win Lines -->	  		 	
+			<ac:IfElse target="@(game.response.bonusWin==0 &amp;&amp; game.response.multiplier==null &amp;&amp; game.response.freespins==null)">
+				<ac:SetModelValue target="ui.spinning" value="@(false)" />
+			</ac:IfElse>
+				
+			<ac:IfElse target="@(game.response.winlines.count > 0)" >
+				<ac:Seq>
+					<ac:SetModelValue target="didWeWin" value="1" />
+					<ac:Call target="showWinLines" />
+				</ac:Seq>
+			</ac:IfElse>
+
+			<ac:Call target="showInternalJackpot" />
+			<ac:Call target="random_jackpot" />
+			
+			<ac:IfElse target="@(didWeWinJackpot==true)">
+				<ac:Call target="display_jackpot" />
+			</ac:IfElse>
+
+			<ac:IfElse target="@(ui.autoplay==false &amp;&amp; ui.spinning==false)">
+				<ac:Seq>
+					<ac:SetModelValue target="ui.btnReveal.visible" value="@(true)" />
+					<ac:SetModelValue target="ui.btnReveal.enabled" value="@(true)" />
+					<ac:SetModelValue target="ui.btnStop.visible" value="@(false)" />
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(ui.freespinsMode == true)">
+				<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(true)" />
+			</ac:IfElse>
+			<ac:IfElse target="@(game.response.freespins.newspins != 0)">
+				<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(false)" />
+			</ac:IfElse>
+			<ac:IfElse target="@(game.response.freespins != null)">
+				<ac:Seq>
+					<ac:SetModelValue target="didWeWin" value="1" />
+					<ac:SetModelValue target="ui.autoplay" value="@(false)" />
+					<ac:SetModelValue target="ui.spinning" value="@(true)" />
+
+					<ac:IfElse target="@(game.response.freespins.totalspins == game.response.freespins.newspins || game.response.freespins.newspins!=0)">
+						<ac:Call target="startFreespins" />
+						<ac:Call target="updateFreespins" />
+					</ac:IfElse>
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(game.response.freespins.totalspins == 0)">
+				<ac:Call target="finishFreespins" />
+			</ac:IfElse>
+			<ac:Call target="checkFreeSpin" fork="true"/>
+		</ac:Seq>
+		<ac:Seq id="checkFreeSpin" >
+
+			<ac:IfElse target="@(game.response.freespins.totalspins &gt; 0 || game.response.freespins.newspins &gt; 0)" >
+				<ac:Seq>
+					<ac:IfElse target="@(game.response.multiplier.counter == 1)" >
+						<ac:Seq>
+							<ac:Call target="addToWinPoints(700)" />
+							<ac:Screenshot />
+						</ac:Seq>
+					</ac:IfElse>
+					<ac:IfElse target="@(game.response.freespins.newspins &gt; 0)">
+						<ac:Call target="prepareFreeSpins" fork="true" />
+					</ac:IfElse>
+				</ac:Seq>
+				<ac:Seq>
+					<ac:Call target="NoWin" />
+					<ac:Call target="UpdatePoints" />
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="prepareFreeSpins" >
+			<ac:Debug message="prepareFreeSpins!" />
+			<ac:SetModelValue target="ui.winlines.atlas" value="" />
+
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(false)"/>
+
+			<ac:Delay target="100" />
+			
+			<ac:SetModelValue target="ui.userInputAllowed" value="@(true)" />
+		</ac:Seq>
+
+
+
+
+
+
+		<ac:Seq id="NoWin">
+			<ac:IfElse target="@(didWeWin==0 &amp;&amp; ui.spinning==false)">
+				<ac:Set>
+					<ac:Debug message="NO WIN" />
+					<ac:Trigger target="no_win_snd" command="play" fork="true" />
+				</ac:Set>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="UpdatePoints" >
+			<ac:Debug message="UpdatePoints!" />
+			
+			<!--  update Win Points  -->
+			<ac:IfElse target="@(game.response.totalWin &gt; 0 || ui.current.pointsBalance != game.response.pointsBalance)">
+				<ac:Seq>
+					<ac:InterruptibleRegion target="bigWinDisplay" >
+						<ac:IfElse target="@(game.response.totalWin &gt; (25*game.totalEntry) || game.response.totalWin == (25*game.totalEntry))" >
+							<ac:Seq>
+								<ac:SetModelValue target="ui.autoplay" value="@(false)" />
+								
+								<ac:Trigger target="big_win_start_snd" command="play" fork="true" />
+								<ac:SetModelValue target="ui.bigwin.frameset" value="static" />
+								<ac:SetModelValue target="ui.bigWin.visible" value="@(true)" />
+								<ac:Tween target="ui.bigwin.x" duration="1000" function="linear" from="-300" to="250" />
+
+								<ac:SetModelValue target="ui.bigwin.frameset" value="bigwin_center" />
+								<ac:Trigger target="bigWin_anim" command="playOnce"  fork="true"/>
+								<ac:SetModelValue target="ui.bigwin.totalWin" value="@(game.response.totalWin)" />
+								<ac:SetModelValue target="ui.bigWin.font.visible" value="@(true)"/>
+								<ac:Delay target="3000"/>
+								
+								<ac:SetModelValue target="ui.bigWin.font.visible" value="@(false)"/>
+								<ac:SetModelValue target="ui.bigwin.frameset" value="static" />
+								<ac:Trigger target="big_win_end_snd" command="play" fork="true" />
+								<ac:Tween target="ui.bigwin.x" duration="1000" function="linear" from="250" to="800" />
+								
+								<ac:SetModelValue target="ui.bigWin.visible" value="@(false)" />
+							</ac:Seq>
+						</ac:IfElse>
+					</ac:InterruptibleRegion>
+					
+					<ac:SetModelValue target="ui.bigWin.visible" value="@(false)" />
+					<ac:SetModelValue target="ui.bigWin.font.visible" value="@(false)"/>
+
+					<ac:IfElse target="@(game.response.multiplier.counter == null)">
+							<ac:SetModelValue target="ui.current.totalWin" value="@(game.response.totalWin)" />
+					</ac:IfElse>
+					
+					<ac:IfElse target="@(game.response.multiplier.counter != 1)">
+						<ac:Call target="rollupWinPoints(700)" />
+					</ac:IfElse>
+				</ac:Seq>
+			</ac:IfElse>
+			
+			<ac:Call target="PostSpinSequence" fork="true" />
+		</ac:Seq>
+		<ac:Seq id="PostSpinSequence" >
+			<ac:Debug message="PostSpinSequence!" />
+			
+			<!--  determine if we are still playing a single 'ticket'  -->
+			<ac:SetModelValue target="fs" value="@(false)" />
+			<ac:IfElse target="@(game.response.freespins != null)" >
+				<ac:Seq>
+					<ac:IfElse target="@(game.response.freespins.totalspins &gt; 0)" >
+						<ac:SetModelValue target="fs" value="@(true)" /> 
+					</ac:IfElse>				  
+				</ac:Seq>
+			</ac:IfElse>
+			
+			<ac:IfElse target="@(fs==false)">
+			 <ac:Seq>
+			 
+				<ac:IfElse target="@(game.skillscale.finalWin != null)">
+					<ac:SetModelValue target="didWeWin" value="1"/>
+				</ac:IfElse>
+				
+				<ac:IfElse target="@(game.config.features.GF_PLAY_SKILL_GAME != 'GF_DISABLED')">
+					<ac:Seq>
+						<ac:IfElse target="@(didWeWin &gt; 0 || game.config.features.GF_PLAY_SKILL_ON_ZERO_WIN == 'GF_ENABLED')">
+							<ac:Seq>
+								<ac:Checkpoint />
+								
+								<ac:IfElse target="@(game.skillscale.finalWin == null)">
+									<ac:Seq>
+										<ac:IfElse target="@(game.config.features.GF_PLAY_SKILL_GAME == 'GF_SKIP_SKILL')">
+											<ac:Call target="skipSkill.skillGame_start" />
+										</ac:IfElse>
+										<ac:IfElse target="@(game.config.features.GF_PLAY_SKILL_GAME == 'GF_BAR_SKILL')">
+											<ac:Call target="skillGame1.skillGame_start" />
+										</ac:IfElse>
+										<ac:IfElse target="@(game.config.features.GF_PLAY_SKILL_GAME == 'GF_BAR_SKILL2_VERTICAL')">
+											<ac:Call target="skillGame2.skillGame_start" />
+										</ac:IfElse>
+									</ac:Seq>
+								</ac:IfElse>
+								
+								<ac:Debug message="** SKILL GAME FINAL WIN CONFIRMED **" />
+								
+								<ac:SetModelValue target="ui.skillgame.potential.visible" value="@(false)"/>
+								<ac:SetModelValue target="ui.skillgame.actual.visible" value="@(true)"/>
+								<ac:SetModelValue target="ui.skillgame.totalWin" value="@(game.skillscale.finalWin)" />
+								<ac:SetModelValue target="ui.current.totalWin" value="@(game.skillscale.finalWin)" />
+								
+								<ac:Call target="rollupWinPoints(1000)" />
+								<ac:Debug message="***** SKILLGAME END *****" />
+								<ac:Checkpoint />
+							</ac:Seq>
+						</ac:IfElse>
+					</ac:Seq>
+				</ac:IfElse>
+				
+				<ac:Debug message="* Calling EndGame *" />
+				<ac:ExecuteProtocol command="EndGame" param="" />
+				<ac:SetModelValue target="ui.game.endGame" value="@(true)" />
+				<ac:Call target="startSpinJoin" />
+			 </ac:Seq>
+			 <ac:Seq>
+				<ac:Debug message="***** DID NOT CALL ENDGAME *****" />
+			 </ac:Seq>
+			</ac:IfElse>
+
+			<ac:SetModelValue target="ui.complete" value="@(true)" />
+
+			<ac:Screenshot />
+			<ac:Checkpoint />
+			<ac:Debug message="Check Point ====== 10" />
+			
+			<ac:IfElse target="@(ui.spinning==false &amp;&amp; ui.autoplay == false)">
+			  <ac:Seq>
+				 <ac:IfElse target="@(fs==false)">
+					<ac:Seq>
+						<ac:Call target="resetButtons"/>
+					</ac:Seq>
+					<ac:Seq>
+						<ac:Call target="offButtons"/>
+					</ac:Seq>
+				</ac:IfElse>
+				<ac:Call target="idleEngine" fork="true"/>
+				<ac:Call target="idleWinLines" fork="true"/>
+			</ac:Seq>
+			<ac:Seq>
+				<ac:IfElse target="@(ui.spinning==false &amp;&amp; ui.autoplay == true)">
+					<ac:Seq>
+						<ac:Delay target="100" />
+						<ac:Call target="playGame" fork="true"/>
+					</ac:Seq>
+				 </ac:IfElse>
+			  </ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="onReelStop" params="sender">
+
+			<ac:IfElse target="@(sender.id == 4)" >
+				<ac:Seq>
+					<ac:Loop from="1" to="3" >
+						<ac:SetModelValue target="ui.pjp@(_index)@(0).visible" value="@(false)" />
+					</ac:Loop>
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(sender.id == 5)" >
+				<ac:Seq>
+					<ac:Loop from="1" to="3" >
+						<ac:SetModelValue target="ui.pjp@(_index)@(1).visible" value="@(false)" />
+					</ac:Loop>
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(sender.id == 0)" >
+				<ac:Seq>
+					<ac:Loop from="1" to="3" >
+						<ac:SetModelValue target="ui.pjp@(_index)@(2).visible" value="@(false)" />
+					</ac:Loop>
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(sender.id == 1)" >
+				<ac:Seq>
+					<ac:Loop from="1" to="3" >
+						<ac:SetModelValue target="ui.pjp@(_index)@(3).visible" value="@(false)" />
+					</ac:Loop>
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(sender.id == 2)" >
+				<ac:Seq>
+					<ac:Loop from="1" to="3" >
+						<ac:SetModelValue target="ui.pjp@(_index)@(4).visible" value="@(false)" />
+					</ac:Loop>
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(sender.id == 6)" >
+				<ac:Seq>
+					<ac:Loop from="1" to="3" >
+						<ac:SetModelValue target="ui.pjp@(_index)@(5).visible" value="@(false)" />
+					</ac:Loop>
+				</ac:Seq>
+			</ac:IfElse>
+
+			<!-- <ac:Debug message="--After ReelStop--" /> -->
+		</ac:Seq>
+		<ac:Seq id="onReelSlowDown" params="senderId">		 
+
+		</ac:Seq>
+		<ac:Seq id="random_jackpot" >
+			<!--  First check if we won jackpot  -->
+			<ac:SetModelValue target="didWeWinJackpot" value="@(false)" />
+			
+			<ac:SetLocalValue target="allowJP" value="@(true)" />			
+			<ac:IfElse target="@(game.response.freespins != null &amp;&amp; game.response.freespins.counter &gt; 0)" >
+				<ac:SetLocalValue target="allowJP" value="@(false)" />
+			</ac:IfElse>			
+
+			<ac:IfElse target="@(game.response.progressive != null &amp;&amp; allowJP == true &amp;&amp; game.response.progressive.type != -1)" >
+			  <ac:Seq>
+				  <ac:Debug message="PROGRESSIVE JACKPOT DETECTED!" />
+				  <ac:Debug message="game.response.progressive.type:@(game.response.progressive.type)" />
+				  <ac:Debug message="game.response.progressive.winning:@(game.response.progressive.winning)" />
+				  
+				  <ac:SetModelValue target="didWeWin" value="1" />
+				  <ac:SetModelValue target="didWeWinJackpot" value="@(true)" />
+				  <ac:SetModelValue target="ui.autoplay" value="@(false)" />
+				  
+				  <ac:SetLocalValue target="rand" value="@(randomStr[0,999,3])" />
+
+			  </ac:Seq>	 
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="display_jackpot" >
+			<!--  Show Jackpot animation routine! -->
+			<ac:SetModelValue target="ui.jackpot.amount" value="" />
+			<ac:SetModelValue target="ui.jackpot.y" value="@(-216)" />
+			<ac:SetModelValue target="ui.jackpot.visible" value="@(true)" />
+			<ac:SetModelValue target="ui.jackpot.highlights.visible" value="@(true)" />
+
+			<ac:Checkpoint />
+			
+			<ac:Delay target="600" />  
+			
+			<!--  special music  -->
+			<ac:Trigger target="jackpot_music" command="play" fork="true" />
+			<ac:Delay target="1000" />
+			
+			<ac:Tween target="ui.jackpot.y" duration="@(300)" function="easeOut" from="@(-216)" to="@(168)" round="true" />
+			
+			<ac:Debug message="game.response.progressive.winning:@(game.response.progressive.winning)" />
+			
+			<!--  count up sound  -->		
+			<ac:Trigger target="pointsCountUp_snd" command="play" fork="true" />
+			<ac:Tween target="ui.jackpot.amount" duration="@(28000)" function="linear" from="@(0)" to="@(game.response.progressive.winning)" round="true" />
+			<ac:Trigger target="pointsCountUp_snd" command="stop" />
+			<ac:Trigger target="pointsCountEnd_snd" command="play" fork="true" />
+			
+			<ac:Delay target="1000" />
+			<ac:Screenshot />
+			<ac:Checkpoint />
+			<ac:Delay target="10000" />
+			
+			<ac:SetModelValue target="ui.jackpot.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.jackpot.highlights.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.autoplay" value="@(false)" />
+			
+			<ac:Call target="addToTotalwin(@(100),@(game.response.progressive.winning))" />
+			
+			<ac:ExecuteProtocol command="PrgsvDisplayNotification" param="" /> <!--  Tell system JP was displayed  -->
+		</ac:Seq>
+		<ac:Seq id="clear_jackpot" >
+			<ac:ExecuteProtocol command="ResetProgressiveJP" param="" />	
+		</ac:Seq>
+		<ac:Seq id="addToTotalwin" params="dur,amount" >
+			<ac:IfElse target="@(amount > 0)" >
+			  <ac:Seq>
+				 <ac:Tween target="ui.current.totalWin" duration="@(dur)" function="linear" from="@(ui.current.totalWin)" to="@(ui.current.totalWin+amount)" round="true" />
+			  </ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="rollupTotalwin" params="dur" >
+			<ac:IfElse target="@(ui.current.totalWin != game.response.totalWin)" >
+			  <ac:Seq>
+	 			 <ac:Tween target="ui.current.totalWin" duration="@(dur)" function="linear" from="@(ui.current.totalWin)" to="@(game.response.totalWin)" round="true" />
+			  </ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="rollupWinPoints" params="dur" >
+			<ac:Trigger target="pointsCountUp_snd" command="play" fork="true" />
+			<ac:Tween target="ui.current.pointsBalance" duration="@(dur)" function="linear" from="@(ui.current.pointsBalance)" to="@(game.response.pointsBalance)" round="true" />
+			<ac:Trigger target="pointsCountUp_snd" command="stop" />
+			<ac:Trigger target="pointsCountEnd_snd" command="play" fork="true" />
+			<ac:SetModelValue target="ui.current.pointsBalance" value="@(game.response.pointsBalance)"/>
+		</ac:Seq>
+		<ac:Seq id="addToWinPoints" params="dur" >
+			<ac:Trigger target="pointsCountUp_snd" command="play" fork="true" />
+			<ac:Tween target="ui.current.pointsBalance" duration="@(dur)" function="linear" from="@(ui.current.pointsBalance)" to="@(ui.current.pointsBalance + game.response.totalWin)" round="true" />
+			<ac:Trigger target="pointsCountUp_snd" command="stop" />
+			<ac:Trigger target="pointsCountEnd_snd" command="play" fork="true" />
+		</ac:Seq>
+		<ac:Seq id="showWinLines" >
+			<ac:IfElse target="@(game.response.winlines != null)" >
+				<ac:Seq>
+					<ac:InterruptibleRegion target="showingWinLines" >
+						<ac:SetModelValue target="ui.delayTime" value="2000" />
+						<ac:Loop from="0" to="@(game.response.winlines.count - 1)" >
+							<ac:Seq>
+								<ac:SetModelValue target="ui.winline" value="@([game.response.winlines[_index]])" />
+
+								<ac:SetModelValue target="ui.infoMessage" value="@('Line '+(game.response.winlines[_index].id+1) +' wins '+ game.response.winlines[_index].winning)"/>
+
+								<ac:SetLocalArray target="winPos" value="@(game.response.winlines[_index].symbolPositions)" />
+								<ac:SetLocalArray target="winWin" value="@(game.response.winlines[_index].winSymbolPositions)" />
+								<ac:SetModelValue target="symbolType" value="@(game.response.reels[game.response.winlines[_index].symbolPositions[0]].type)" />
+								<ac:SetModelValue target="winCount" value="@(0)" />
+								
+								<ac:Call target="resetSymbols" />
+								
+								<ac:SetModelValue target="ui.winlines.atlas" value="" />
+								
+								<ac:IfElse target="@(ui.pjp[2].win == false &amp;&amp; ui.pjp[3].win == false)" >
+									<ac:Seq>
+										<ac:Call target="blinkIndicator(@(game.response.winlines[_index].id),ui.delayTime)" fork="true"/>
+										<ac:SetModelValue target="ui.winframe.frameIndex" value="@(game.response.winlines[_index].id)" />
+										<ac:SetModelValue target="ui.winframe.visible" value="@(true)" />
+										
+										<!-- play win animation -->
+										<ac:IfElse target="@(winPos.length &gt; 0)">
+											<ac:Loop from="0" to="@(winPos.length - 1)">
+												<ac:SetLocalValue target="symbol" value="@(winPos[_index])" />
+												<ac:IfElse target="@(winWin[_index] == (true))">
+													<ac:Seq>
+														<ac:SetModelValue target="ui.reelsymbol@(symbol).childFrameSet" value="symbol=win" />
+														<ac:SetModelValue target="ui.reelsymbol@(symbol).childState" value="symbol=true,winframe=true" />
+														<ac:SetModelValue target="ui.reelsymbol@(symbol).childClipping" value="symbol=false,winframe=false" />
+														<ac:SetModelValue target="winCount" value="@(winCount+1)" />
+														<ac:Trigger target="sym@(symbol)" command="playLoop" fork="true" />
+													</ac:Seq>
+													<ac:Seq>
+														<ac:SetModelValue target="ui.reelsymbol@(symbol).childFrameSet" value="symbol=static" />
+														<ac:SetModelValue target="ui.reelsymbol@(symbol).childState" value="symbol=true,winframe=true" />
+														<ac:SetModelValue target="ui.reelsymbol@(symbol).childClipping" value="symbol=true" />
+														<ac:Trigger target="sym@(symbol)" command="stop" />
+													</ac:Seq>
+												</ac:IfElse>
+											</ac:Loop>
+										</ac:IfElse>
+									</ac:Seq>
+									<ac:Seq>
+										<ac:SetModelValue target="winCount" value="@(symbolType)" />
+										<ac:SetModelValue target="symbolType" value="@(symbolType)" />
+										<!-- play win animation -->
+										<ac:Loop from="0" to="8">
+											<ac:IfElse target="@(game.response.reels[_index].type == symbolType)">
+												<ac:Seq>
+													<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=win" />
+													<ac:SetModelValue target="ui.reelsymbol@(_index).childState" value="symbol=true,winframe=true" />
+													<ac:SetModelValue target="ui.reelsymbol@(_index).childClipping" value="symbol=false,winframe=false" />
+													<ac:Trigger target="sym@(_index)" command="playLoop" fork="true" />
+												</ac:Seq>
+											</ac:IfElse>
+										</ac:Loop>
+									</ac:Seq>
+								</ac:IfElse>
+								
+								<ac:SetModelValue target="won_paytable" value="8" />
+								<ac:IfElse target="@(symbolType == 0 &amp;&amp; winCount == 3)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="0" />
+										<ac:SetModelValue target="ui.delayTime" value="3500" />
+									</ac:Seq>
+								</ac:IfElse>
+								<ac:IfElse target="@(symbolType == 1 &amp;&amp; winCount == 3)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="1" />
+										<ac:SetModelValue target="ui.delayTime" value="3500" />
+									</ac:Seq>
+								</ac:IfElse>
+								<ac:IfElse target="@(symbolType == 2 &amp;&amp; winCount == 3)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="2" />
+										<ac:SetModelValue target="ui.delayTime" value="2500" />
+									</ac:Seq>
+								</ac:IfElse>
+								<ac:IfElse target="@(symbolType == 3 &amp;&amp; winCount == 3)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="3" />
+										<ac:SetModelValue target="ui.delayTime" value="3500" />
+									</ac:Seq>
+								</ac:IfElse>
+								<ac:IfElse target="@(symbolType == 4 &amp;&amp; winCount == 3)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="4" />
+										<ac:SetModelValue target="ui.delayTime" value="1000" />
+									</ac:Seq>
+								</ac:IfElse>
+								<ac:IfElse target="@(symbolType == 5 &amp;&amp; winCount == 3)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="5" />
+										<ac:SetModelValue target="ui.delayTime" value="1000" />
+									</ac:Seq>
+								</ac:IfElse>
+								<ac:IfElse target="@(symbolType == 5 &amp;&amp; winCount == 2)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="6" />
+										<ac:SetModelValue target="ui.delayTime" value="1000" />
+									</ac:Seq>
+								</ac:IfElse>
+								<ac:IfElse target="@(symbolType == 5 &amp;&amp; winCount == 1)" >
+									<ac:Seq>
+										<ac:SetModelValue target="won_paytable" value="7" />
+										<ac:SetModelValue target="ui.delayTime" value="1000" />
+									</ac:Seq>
+								</ac:IfElse>
+								
+								<ac:Debug message="number of the symbol @(symbolType)"/>
+								
+								<ac:Trigger target="winningSymbol@(won_paytable)_snd" command="play" fork="true" />
+								<ac:Call target="addToTotalwin(@(800),@(game.response.winlines[_index].winning))" fork="true"/>
+								<ac:Delay target="@(ui.delayTime)" />
+
+								<!--  reset wild morphs back  -->
+								<ac:IfElse target="@(game.response.freespins != null &amp;&amp; game.response.reels[symbol].morphType != null)">
+								  <ac:Seq>
+									<ac:Loop from="0" to="8">
+										<ac:Seq>
+										  <ac:SetModelValue target="ui.reelsymbol@(_index).type" value="@(game.response.reels[_index].type)" />
+										  <ac:SetModelValue target="ui.reelsymbol@(_index).childAnimation" value="symbol=symbol@(game.response.reels[_index].type)anim"/>												  
+										</ac:Seq>
+									</ac:Loop>
+								  </ac:Seq>
+								</ac:IfElse>
+								
+								<!--  reset other stuff  -->
+								<ac:SetModelValue target="ui.indicator@(game.response.winlines[_index].id).value" value="@(game.entryLevel*game.denomination)" />
+								<ac:SetModelValue target="ui.animateIndicator" value="@(false)" />
+							</ac:Seq>
+						</ac:Loop>
+						
+						<ac:Trigger target="pointsCountUp_snd" command="stop" />
+						<ac:Checkpoint />
+						<ac:Delay target="800" />
+					</ac:InterruptibleRegion>
+					
+					<ac:Trigger target="pointsCountUp_snd" command="stop" />
+					<ac:SetModelValue target="ui.winline" value="" />
+					<ac:SetModelValue target="ui.animateIndicator" value="@(false)" />
+					<ac:SetModelValue target="ui.winframe.visible" value="@(false)" />
+				</ac:Seq>	
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="idleWinLines" >
+			<ac:IfElse target="@(game.response.winlines != null)" >
+				<ac:Seq>
+					<ac:InterruptibleRegion target="showingWinLines" >
+						
+						<ac:Loop from="0" to="@(game.response.winlines.count - 1)" >
+							<ac:Seq>
+								<ac:SetModelValue target="ui.winline" value="@([game.response.winlines[_index]])" />
+								<ac:SetModelValue target="ui.animateIndicator" value="@(true)" />
+								<ac:Call target="blinkIndicator(@(game.response.winlines[_index].id))" fork="true"/>
+								
+								<ac:SetModelValue target="ui.infoMessage" value="@('Line '+(game.response.winlines[_index].id+1) +' wins '+ game.response.winlines[_index].winning)"/>
+								
+								<ac:SetLocalArray target="winPos" value="@(game.response.winlines[_index].symbolPositions)" />
+								<ac:SetLocalArray target="winWin" value="@(game.response.winlines[_index].winSymbolPositions)" />
+								<ac:SetModelValue target="symbolType" value="@(game.response.reels[game.response.winlines[_index].symbolPositions[0]].type)" />
+								<ac:SetModelValue target="winCount" value="@(0)" />
+								
+								<ac:Call target="resetSymbols" />
+								
+								<ac:SetModelValue target="ui.winlines.atlas" value="" />
+								
+								<ac:IfElse target="@(ui.pjp[2].win == false &amp;&amp; ui.pjp[3].win == false)" >
+									<ac:Seq>
+										<ac:Call target="blinkIndicator(@(game.response.winlines[_index].id),ui.delayTime)" fork="true"/>
+										<ac:SetModelValue target="ui.winframe.frameIndex" value="@(game.response.winlines[_index].id)" />
+										<ac:SetModelValue target="ui.winframe.visible" value="@(true)" />
+										
+										<!-- play win animation -->
+										<ac:IfElse target="@(winPos.length &gt; 0)">
+											<ac:Loop from="0" to="@(winPos.length - 1)">
+												<ac:SetLocalValue target="symbol" value="@(winPos[_index])" />
+												<ac:IfElse target="@(winWin[_index] == (true))">
+													<ac:Seq>
+													  <ac:SetModelValue target="ui.reelsymbol@(symbol).childFrameSet" value="symbol=win" />
+													  <ac:SetModelValue target="ui.reelsymbol@(symbol).childState" value="symbol=true,winframe=true" />
+													  <ac:SetModelValue target="ui.reelsymbol@(symbol).childClipping" value="symbol=false,winframe=false" />
+													  <ac:SetModelValue target="winCount" value="@(winCount+1)" />
+													  <ac:Trigger target="sym@(symbol)" command="playLoop" fork="true" />
+													</ac:Seq>
+													<ac:Seq>
+													  <ac:SetModelValue target="ui.reelsymbol@(symbol).childFrameSet" value="symbol=static" />
+													  <ac:SetModelValue target="ui.reelsymbol@(symbol).childState" value="symbol=true,winframe=true" />
+													  <ac:SetModelValue target="ui.reelsymbol@(symbol).childClipping" value="symbol=true" />
+													  <ac:Trigger target="sym@(symbol)" command="stop" />
+													</ac:Seq>
+												</ac:IfElse>
+											</ac:Loop>
+										</ac:IfElse>
+									</ac:Seq>
+									<ac:Seq>
+										<ac:SetModelValue target="winCount" value="@(symbolType)" />
+										<ac:SetModelValue target="symbolType" value="@(symbolType)" />
+										<!-- play win animation -->
+										<ac:Loop from="0" to="8">
+											<ac:IfElse target="@(game.response.reels[_index].type == symbolType)">
+												<ac:Seq>
+													<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=win" />
+													<ac:SetModelValue target="ui.reelsymbol@(_index).childState" value="symbol=true,winframe=true" />
+													<ac:SetModelValue target="ui.reelsymbol@(_index).childClipping" value="symbol=false,winframe=false" />
+													<ac:Trigger target="sym@(_index)" command="playLoop" fork="true" />
+												</ac:Seq>
+											</ac:IfElse>
+										</ac:Loop>
+									</ac:Seq>
+								</ac:IfElse>
+								
+								<ac:Delay target="2000" />
+								
+								<!--  reset wild morphs back  -->
+								<ac:IfElse target="@(game.response.freespins != null &amp;&amp; game.response.reels[symbol].morphType != null)">
+								  <ac:Seq>
+									<ac:Loop from="0" to="8">
+										<ac:Seq>
+										  <ac:SetModelValue target="ui.reelsymbol@(_index).type" value="@(game.response.reels[_index].type)" />
+										  <ac:SetModelValue target="ui.reelsymbol@(_index).childAnimation" value="symbol=symbol@(game.response.reels[_index].type)anim"/>												  
+										</ac:Seq>
+									</ac:Loop>
+								  </ac:Seq>
+								</ac:IfElse>
+								
+								<!--  reset other stuff  -->
+								<ac:SetModelValue target="ui.indicator@(game.response.winlines[_index].id).value" value="@(game.entryLevel*game.denomination)" />
+							</ac:Seq>
+						</ac:Loop>
+						
+						<ac:Delay target="800" />
+						
+						<ac:SetModelValue target="ui.winline" value="" />
+						<ac:Call target="idleWinLines" fork="true" />
+						
+					</ac:InterruptibleRegion>
+					
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="updateFreespins" >
+			<ac:Debug message="updateFreespins" />
+
+			<ac:Call target="ShowInfoBarMsg(2)" />
+			
+			<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(false)"/>
+			
+			<ac:Screenshot />
+			<ac:Checkpoint />
+			<ac:Debug message="Check Point ====== 25" />
+		</ac:Seq>
+		<ac:Seq id="recoverFreespins" >
+			<ac:Debug message="recoverFreespins" />
+			
+			<ac:SetModelValue target="ui.freespinsMode" value="@(true)" />
+			<ac:SetModelValue target="ui.buttons.y" value="678" />
+			<ac:SetModelValue target="ui.infobar.y" value="600" />
+			<ac:SetModelValue target="ui.mainBkg.visible" value="@(true)" />
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnRevealFreeSpins.visible" value="@(true)"/>
+		</ac:Seq>
+		<ac:Seq id="resetSymbols">
+			<ac:Loop from="0" to="8">
+			  <ac:Set>
+				  <ac:SetModelValue target="ui.reelsymbol@(_index).childClipping" value="symbol=true,winframe=true" />
+				  <ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=static" />
+				  <ac:SetModelValue target="ui.reelsymbol@(_index).childState" value="symbol=true,winframe=false,luckySymbol=false" />
+				  
+				  <ac:SetModelValue target="ui.reelsymbol@(_index).type" value="@(game.response.reels[_index].type)" />
+				  <ac:SetModelValue target="ui.reelsymbol@(_index).childAnimation" value="symbol=symbol@(game.response.reels[_index].type)anim"/>												
+				  
+				  <ac:Trigger target="sym@(_index)" command="stop" />
+			  </ac:Set>
+			</ac:Loop>
+		</ac:Seq>
+		<ac:Seq id="animateSymbols" params="pos">
+			<ac:Loop from="0" to="8">
+			  <ac:Seq>
+				 <ac:IfElse target="@(game.response.reels[_index].type == pos)">
+					<ac:Seq>
+						<ac:SetModelValue target="ui.reelsymbol@(_index).childClipping" value="symbol=false,winframe=true" />
+						<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=win" />
+						<ac:SetModelValue target="ui.reelsymbol@(_index).childState" value="symbol=true,winframe=false,luckySymbol=false" />
+						<ac:Trigger target="sym@(_index)" command="playLoop" fork="true" />
+					</ac:Seq>
+				</ac:IfElse>
+			  </ac:Seq>
+			</ac:Loop>
+		</ac:Seq>
+		<ac:Seq id="showMessage" params="msgInd" >
+			<ac:InterruptRegion target="message" />
+			<ac:InterruptibleRegion target="message" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.messages.visible" value="@(true)" />
+					<ac:SetModelValue target="ui.messages.frameIndex" value="@(msgInd)" />
+					<ac:Delay target="5000" />
+				</ac:Seq>
+			</ac:InterruptibleRegion>
+			<ac:SetModelValue target="ui.messages.visible" value="@(false)"/>
+		</ac:Seq>
+
+
+<!-- freespin -->
+		<ac:Seq id="startFreespins" >
+			<ac:SetModelValue target="ui.idleFlag" value="@(false)" />
+			<ac:SetModelValue target="ui.freespinsMode" value="@(true)" />
+
+			<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.enabled" value="@(false)"/>
+			<ac:SetModelValue target="ui.btnAutoStop.enabled" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnAutoStop.visible" value="@(false)"/>
+			
+
+			<ac:Set>
+				<ac:Trigger target="freeSpin1_snd" command="play" fork="true"/>
+				<ac:SetModelValue target="ui.potion.frameSet" value="@(static)" />
+				<ac:SetModelValue target="ui.showBonusMorph.visible" value="@(true)" />
+				<ac:SetModelValue target="ui.showBonusMorph2.visible" value="@(true)" />
+				<ac:SetModelValue target="ui.potion.frameSet" value="@(fadeAway)" />
+				<ac:Trigger target="potion" command="playOnce"/>
+			</ac:Set>
+
+			<ac:SetModelValue target="ui.showBonusMorph2.visible" value="@(false)" />
+			<ac:SetModelValue target="ui.reelsymbol4.childFrameSet" value="symbol=empty" />
+			<ac:SetModelValue target="ui.showBonusGame[4].visible" value="@(true)" />
+			<ac:Trigger target="freeSpin2_snd" command="playOnce" />
+			
+			
+			<ac:IfElse target="@(game.response.freespins.totalspins &gt; 0)">
+				<ac:Seq>
+					<ac:Checkpoint />
+					<ac:Loop from="0" to="8">
+						<ac:IfElse target="@(_index != 4)">
+							<ac:Seq>
+								<ac:Delay target="50" />
+								<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=empty" />
+								<ac:SetModelValue target="ui.showBonusGame[_index].visible" value="@(true)" />
+							</ac:Seq>
+						</ac:IfElse>
+					</ac:Loop>
+				</ac:Seq>
+			</ac:IfElse>
+	
+			<ac:Checkpoint />
+		</ac:Seq>
+		<ac:Seq id="selectFreeSpin" params="btnID">
+		
+			<ac:IfElse target="@(ui.userInputAllowed == true)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.userInputAllowed" value="@(false)" />
+
+					<ac:SetModelValue target="ui.showBonusGame[@(btnID)].visible" value="@(false)" />
+					<ac:SetModelValue target="ui.showBonusFreeSpins[@(btnID)].visible" value="@(true)"/>
+					<ac:SetModelValue target="ui.showBonusGameText[@(btnID)].atlas" value="freespinFontAtlas"/>
+					<ac:SetModelValue target="ui.btnBonus@(btnID).value" value="@(game.response.freespins.newspins)"/>
+					<ac:SetModelValue target="ui.freePlays.msg.visible" value="@(true)" />
+					
+					<ac:Delay target="1250"/>
+
+					<ac:Loop from="0" to="8">
+						<ac:IfElse target="@(_index != 4)">
+							<ac:IfElse target="@((ui.showBonusGame[_index].visible == true))">
+								<ac:Seq>
+									<ac:Delay target="50" />
+									<ac:SetModelValue target="ui.showBonusGame[_index].visible" value="@(false)" />
+									<ac:SetModelValue target="ui.showBonusFreeSpins[_index].visible" value="@(true)"/>
+								</ac:Seq>
+							</ac:IfElse>
+						</ac:IfElse>
+					</ac:Loop>
+					<ac:Loop from="0" to="8">
+						<ac:SetModelValue target="ui.showBonusFreeSpins[_index].visible" value="@(true)"/>
+					</ac:Loop>
+					<ac:Delay target="1000" />
+
+					<ac:Loop from="0" to="8" >
+						<ac:Seq>
+							<ac:SetModelValue target="ui.showBonusFreeSpins[_index].visible" value="@(false)"/>
+							<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=static" />
+						</ac:Seq>
+					</ac:Loop>
+					
+					<ac:SetModelValue target="ui.showBonusGame[4].visible" value="@(false)" />
+					<ac:SetModelValue target="ui.btnBonus@(btnID).value" value=""/>
+
+					<ac:Set>
+						<ac:SetModelValue target="ui.btnHelp.enabled" value="@(true)"/>
+						<ac:SetModelValue target="ui.btnReveal.visible" value="@(false)"/>
+						<ac:SetModelValue target="ui.btnRevealFreeSpins.enabled" value="@(true)"/>
+						<ac:SetModelValue target="ui.btnRevealFreeSpins.visible" value="@(true)"/>
+					</ac:Set>
+
+					<ac:Call target="ShowInfoBarMsg(2)" />
+					<ac:Screenshot />
+					<ac:Checkpoint />
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="finishFreespins" >
+			<ac:SetModelValue target="ui.freePlays.msg.visible" value="@(false)" />
+
+			<ac:Screenshot />
+			<ac:Checkpoint />
+
+			<ac:Loop from="0" to="8">
+				<ac:Delay target="100" />
+				<ac:SetModelValue target="ui.showBonusGame[_index].visible" value="@(false)" />
+				<ac:SetModelValue target="ui.reelsymbol@(_index).childFrameSet" value="symbol=static" />
+			</ac:Loop>
+
+			<!--  reset background colour  -->
+			<ac:SetModelValue target="ui.freespinsMode" value="@(false)" />
+			<ac:SetModelValue target="ui.spinning" value="@(false)" />
+			<ac:SetModelValue target="ui.autoplay" value="@(false)" />
+			<ac:Call target="resetButtons"/>
+			<ac:SetModelValue target="ui.btnAutoReveal.visible" value="@(true)"/>
+			<ac:SetModelValue target="ui.btnAutoStop.visible" value="@(false)"/>
+		</ac:Seq>
+
+<!--  .......... other stuff .........................  -->
+
+		<ac:Seq id="onTotalWinChange">
+			<ac:Debug message="onTotalWinChange" />
+			<ac:SetModelValue target="ui.btnClearAll.enabled" value="@(true)" />
+		</ac:Seq>
+		<ac:Seq id="idleEngine">
+			<ac:SetModelValue target="ui.idleFlag" value="@(false)" />
+			<ac:IfElse target="@(ui.freespinsMode == false)">
+				<ac:Call target="ShowInfoBarMsg(0)" />
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="ShowInfoBarMsg" params="onPlay">
+  			<ac:SetModelValue target="ui.msgInfobar.msg.visible" value="@(false)" />
+			<ac:SetModelValue target="changeMessage" value="@(onPlay)" />
+
+  			<ac:IfElse target="@(onPlay==1)">
+				<ac:Seq>
+					<ac:SetModelValue target="ui.messageShow" value="@(ui.messageShow+1)" />
+					<ac:IfElse target="@((ui.messageShow%3)==0)">
+						<ac:Seq>
+							<ac:SetModelValue target="ui.msgInfobar.msg.visible" value="@(true)" />
+							<ac:SetModelValue target="ui.msgInfobar.frameset" value="@(random[1,3])"  />  
+							<ac:Trigger target="msgInfoBar_ani" command="playLoop"/>
+						</ac:Seq>
+					</ac:IfElse>
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+
+		<ac:Seq id="blinkIndicator" params="indicatorNumber,delayTime">
+			<ac:SetModelValue target="delay_time" value="@(delayTime/8)" />
+			
+			<ac:Loop from="0" to="4">
+				<ac:SetModelValue target="ui.indicator@(indicatorNumber).value" value="" />
+				<ac:Delay target="@(delayTime/4)"/>
+				<ac:SetModelValue target="ui.indicator@(indicatorNumber).value" value="@(game.entryLevel*game.denomination)" />
+				<ac:Delay target="@(delayTime/4)"/>
+			</ac:Loop>
+		</ac:Seq>
+		<ac:Seq id="setIndicatorValue" params="val,frame" >
+			<ac:Debug message="setIndicatorValue @(val),@(frame)" />
+			<ac:Loop from="0" to="19" >
+				<ac:SetModelValue target="ui.indicator@($_index).value" value="@(val)" />
+			</ac:Loop>
+		</ac:Seq>
+		<ac:Seq id="updatePJPAnim" params="id" >
+			<!-- <ac:Debug message="updatePJPAnim! @(game.response.bonuses[1].param) @(game.response.bonuses[2].param) @(game.response.bonuses[3].param)" /> -->
+		
+			<ac:SetModelValue target="length_digits" value="1" />
+			<ac:SetModelValue target="_value" value="@(ui.pjp[id].text.value)" />
+			<!-- <ac:Debug message="_value @(_value)" /> -->
+			<ac:IfElse target="@(ui.pjp[id].text.value &gt; 9)" >
+				<ac:SetModelValue target="length_digits" value="2" />
+			</ac:IfElse>
+			<ac:IfElse target="@(ui.pjp[id].text.value &gt; 99)" >
+				<ac:SetModelValue target="length_digits" value="3" />
+			</ac:IfElse>
+			<ac:IfElse target="@(ui.pjp[id].text.value &gt; 999)" >
+				<ac:SetModelValue target="length_digits" value="4" />
+			</ac:IfElse>
+			<ac:IfElse target="@(ui.pjp[id].text.value &gt; 9999)" >
+				<ac:SetModelValue target="length_digits" value="5" />
+			</ac:IfElse>
+			<ac:IfElse target="@(ui.pjp[id].text.value &gt; 99999)" >
+				<ac:SetModelValue target="length_digits" value="6" />
+			</ac:IfElse>
+			
+			<!-- <ac:Debug message="length_digits @(length_digits)" /> -->
+			
+			<ac:Loop from="0" to="5" >
+				<ac:IfElse target="@(_index &lt; length_digits)" >
+					<ac:SetModelValue target="ui.pjp@(id)@(_index).visible" value="@(true)" />
+					<ac:SetModelValue target="ui.pjp@(id)@(_index).visible" value="@(false)" />
+				</ac:IfElse>
+			</ac:Loop>
+			
+			<ac:IfElse target="@(length_digits == 2)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.pjp@(id)@(0).x" value="60" />
+					<ac:SetModelValue target="ui.pjp@(id)@(1).x" value="46" />
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(length_digits == 3)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.pjp@(id)@(0).x" value="69" />
+					<ac:SetModelValue target="ui.pjp@(id)@(1).x" value="55" />
+					<ac:SetModelValue target="ui.pjp@(id)@(2).x" value="41" />
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(length_digits == 4)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.pjp@(id)@(0).x" value="75" />
+					<ac:SetModelValue target="ui.pjp@(id)@(1).x" value="61" />
+					<ac:SetModelValue target="ui.pjp@(id)@(2).x" value="47" />
+					<ac:SetModelValue target="ui.pjp@(id)@(3).x" value="33" />
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(length_digits == 5)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.pjp@(id)@(0).x" value="83" />
+					<ac:SetModelValue target="ui.pjp@(id)@(1).x" value="69" />
+					<ac:SetModelValue target="ui.pjp@(id)@(2).x" value="55" />
+					<ac:SetModelValue target="ui.pjp@(id)@(3).x" value="41" />
+					<ac:SetModelValue target="ui.pjp@(id)@(4).x" value="27" />
+				</ac:Seq>
+			</ac:IfElse>
+			<ac:IfElse target="@(length_digits == 6)" >
+				<ac:Seq>
+					<ac:SetModelValue target="ui.pjp@(id)@(0).x" value="89" />
+					<ac:SetModelValue target="ui.pjp@(id)@(1).x" value="75" />
+					<ac:SetModelValue target="ui.pjp@(id)@(2).x" value="61" />
+					<ac:SetModelValue target="ui.pjp@(id)@(3).x" value="47" />
+					<ac:SetModelValue target="ui.pjp@(id)@(4).x" value="33" />
+					<ac:SetModelValue target="ui.pjp@(id)@(5).x" value="19" />
+				</ac:Seq>
+			</ac:IfElse>
+		</ac:Seq>
+		<ac:Seq id="updatePJP">
+			<!-- <ac:Debug message="updatePJP1! @(game.response.bonuses['1'].param)" /> -->
+		  
+			<ac:IfElse target="@(game.response.bonuses['1'].param != null)" >
+				<ac:Call target="StartSpinAnimation" />
+			</ac:IfElse>
+			
+			<ac:Loop from="1" to="3" >
+				<ac:SetModelValue target="temp_index" value="@(_index)" />
+				<ac:Loop from="0" to="5" >
+					<ac:Trigger target="pjp_digits_anim@(temp_index)@(_index)" command="playLoop" fork="true" />
+				</ac:Loop>
+			</ac:Loop>
+		</ac:Seq>
+		<ac:Seq id="StartSpinAnimation">
+			<!-- start to show progressive jackpot -->
+			<ac:Seq>
+				<ac:IfElse target="@(game.response.bonuses['1'].param[12] &gt; 0)" >
+					<ac:Seq>
+						<ac:SetModelValue target="ui.pjp[1].text.value" value="@(game.response.bonuses['1'].param[12])" />
+						<ac:SetModelValue target="ui.pjp[1].win" value="@(true)" />
+					</ac:Seq>
+					<ac:Seq>
+						<ac:SetModelValue target="ui.pjp[1].text.value" value="@(game.response.bonuses['1'].param[13])" />
+						<ac:SetModelValue target="ui.pjp[1].win" value="@(false)" />
+					</ac:Seq>
+				</ac:IfElse>
+				<ac:IfElse target="@(game.response.bonuses['1'].param[7] &gt; 0)" >
+					<ac:Seq>
+						<ac:SetModelValue target="ui.pjp[2].text.value" value="@(game.response.bonuses['1'].param[7])" />
+						<ac:SetModelValue target="ui.pjp[2].win" value="@(true)" />
+					</ac:Seq>
+					<ac:Seq>
+						<ac:SetModelValue target="ui.pjp[2].text.value" value="@(game.response.bonuses['1'].param[8])" />
+						<ac:SetModelValue target="ui.pjp[2].win" value="@(false)" />
+					</ac:Seq>
+				</ac:IfElse>
+				<ac:IfElse target="@(game.response.bonuses['1'].param[2] &gt; 0)" >
+					<ac:Seq>
+						<ac:SetModelValue target="ui.pjp[3].text.value" value="@(game.response.bonuses['1'].param[2])" />
+						<ac:SetModelValue target="ui.pjp[3].win" value="@(true)" />
+					</ac:Seq>
+					<ac:Seq>
+						<ac:SetModelValue target="ui.pjp[3].text.value" value="@(game.response.bonuses['1'].param[3])" />
+						<ac:SetModelValue target="ui.pjp[3].win" value="@(false)" />
+					</ac:Seq>
+				</ac:IfElse>
+			</ac:Seq>
+			
+			<ac:Call target="updatePJPAnim(1)" />
+			<ac:Call target="updatePJPAnim(2)" />
+			<ac:Call target="updatePJPAnim(3)" />
+		</ac:Seq>
+		<ac:Seq id="showInternalJackpot" >
+			<ac:Loop from="1" to="3" >
+				<ac:SetModelValue target="jp_index" value="@(_index)" />
+				<ac:IfElse target="@((game.entryLevel == game.maxEntry &amp;&amp; game.totalEntry != 0) || (jp_index == 1))" >
+					<ac:Seq>
+						<ac:IfElse target="@(ui.pjp[jp_index].win == true)" >
+							<ac:Seq>
+								<ac:Trigger target="winningSymbolEnd_snd" command="play" fork="true" />
+								<ac:SetModelValue target="ui.progressiveAnimation.visible" value="@(true)" />
+
+								<ac:Call target="blinkRightWins(@(jp_index))" fork="true"/>
+								
+								<ac:Trigger target="animationProgressiveJP" command="play" fork="true"/>
+								<ac:Delay target="3000"/>
+								<ac:Trigger target="animationProgressiveJP" command="stop" />
+								
+								<ac:SetModelValue target="ui.progressiveAnimation.visible" value="@(false)" />
+								<ac:Trigger target="winningSymbolEnd_snd" command="stop" />
+								<ac:Delay target="100"/>
+							</ac:Seq>
+						</ac:IfElse>
+					</ac:Seq>
+				</ac:IfElse>
+				
+			</ac:Loop>
+		
+		</ac:Seq>
+		<ac:Seq id="blinkRightWins" params="id">
+			<ac:Loop from="0" to="6">
+				<ac:SetModelValue target="ui.progrssive@(id).frameIndex" value="0" />
+				<ac:Delay target="200"/>
+				<ac:SetModelValue target="ui.progrssive@(id).frameIndex" value="2" />
+				<ac:Delay target="200"/>
+			</ac:Loop>
+		</ac:Seq>
+		<ac:SetModelValue id="setModelValue" params="tgt,val" target="@(tgt)" value="@(val)"/>
+		<ac:Seq id="updateInfobarDisplay">
+			<ac:SetModelValue target="ui.skillgame.totalWin" value="@(game.response.ticketWin)" />  
+		</ac:Seq>
+		<ac:Seq id="updateTicketValue">
+			<ac:IfElse target="@(game.response.ticket!=null)">
+				<ac:SetModelValue target="ui.ticketLabel.visible" value="@(true)" />
+				<ac:SetModelValue target="ui.ticketLabel.visible" value="@(false)" />
+			</ac:IfElse>
+        </ac:Seq>
+	</ac:Root>
+</Root>
