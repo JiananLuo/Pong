@@ -1,0 +1,1 @@
+The xmllint program parses one or more XML files, specified on the command line as xmlfile. It prints various types of output, depending upon the options selected. It is useful for detecting errors both in XML code and in the XML parser itself.
